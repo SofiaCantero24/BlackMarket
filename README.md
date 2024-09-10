@@ -1,50 +1,58 @@
-# Welcome to your Expo app 👋
+<h1 align="center">
+  <img alt="logo" src="./assets/RootstrapIcon.jpg" width="124px" style="border-radius:10px"/><br/>
+Mobile App </h1>
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+> This Project is based on [Rootstrap React Native Template](https://github.com/rootstrap/react-native-template)
 
-## Get started
+## Requirements
 
-1. Install dependencies
+- [React Native dev environment](https://reactnative.dev/docs/environment-setup)
+- [Node.js LTS release](https://nodejs.org/en/)
+- [Git](https://git-scm.com/)
+- [Watchman](https://facebook.github.io/watchman/docs/install#buildinstall), required only for macOS or Linux users
+- [Pnpm](https://pnpm.io/installation)
+- [VS Code Editor](https://code.visualstudio.com/download) ⚠️ Make sure to install all recommended extension from `.vscode/extensions.json`
 
-   ```bash
-   npm install
-   ```
+## 👋 Quick start
 
-2. Start the app
+Clone the repo to your machine and install deps :
 
-   ```bash
-    npx expo start
-   ```
+```sh
+git clone https://github.com/user/repo-name
 
-In the output, you'll find options to open the app in a
+cd ./repo-name
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+pnpm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+To run the app on ios
 
-## Learn more
+```sh
+pnpm ios
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+To run the app on Android
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```sh
+pnpm android
+```
 
-## Join the community
+To build your app locally you can run any of the build scripts with --local.
 
-Join our community of developers creating universal apps.
+`pnpm build:development:ios --local`
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### SonarQube setup
+
+SonarQube is an open-source platform for continuous inspection of code quality. It performs automatic reviews to detect bugs, code smells, and security vulnerabilities. Rootstrap has a SonarQube instance to improve the quality of the software we develop. On each PR, a GitHub Action is triggered to perform the analysis. To set up SonarQube correctly, you need to add the `SONAR_TOKEN`, `SONAR_URL`, and `SONAR_PROJECT` secrets to the repository. Additionally, you must select the quality gate named `ReactNativeTemplate` for your project on SonarQube. In case you're using this project outside Rootstrap and you're not planning to use SonarQube the sonar scanner [workflow](.github/workflows/sonar.yml) should be deleted.
+
+## ✍️ Documentation
+
+- [Rules and Conventions](https://starter.obytes.com/getting-started/rules-and-conventions/)
+- [Project structure](https://starter.obytes.com/getting-started/project-structure)
+- [Environment vars and config](https://starter.obytes.com/getting-started/environment-vars-config)
+- [UI and Theming](https://starter.obytes.com/ui-and-theme/ui-theming)
+- [Components](https://starter.obytes.com/ui-and-theme/components)
+- [Forms](https://starter.obytes.com/ui-and-theme/Forms)
+- [Data fetching](https://starter.obytes.com/guides/data-fetching)
+- [Contribute to starter](https://starter.obytes.com/how-to-contribute/)
+- [Distribute using EAS](/EAS.md)
