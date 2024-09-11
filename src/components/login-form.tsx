@@ -28,10 +28,66 @@ export type LoginFormProps = {
   onSubmit?: SubmitHandler<FormType>;
 };
 
+type InputPropsType = {
+  name: 'name' | 'email' | 'password';
+  label: string;
+  placeholder: string;
+  secureTextEntry?: boolean;
+};
+
+const TopImageLogo = () => {
+  return (
+    <View className="mb-8 items-center">
+      <Image
+        contentFit="contain"
+        className="h-16 w-48"
+        source={images.authLogo()}
+      />
+    </View>
+  );
+};
+
+const BottomTextComponenent = () => {
+  return (
+    <View className="items-center justify-center rounded-lg bg-white p-4">
+      <Text className="font-medium">Don't have an account?</Text>
+      <Link href="/signup" asChild>
+        <Button
+          testID="signin-button"
+          label="Sing up"
+          className="h-12 w-full rounded-lg border-black"
+          variant="outline"
+        />
+      </Link>
+    </View>
+  );
+};
+
 export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
   const { handleSubmit, control } = useForm<FormType>({
     resolver: zodResolver(schema),
   });
+
+  const inputConstants = {
+    control,
+    className: 'mb-2 rounded-lg border bg-white p-3',
+    labelClassname: 'font-semibold',
+  };
+
+  const inputProps: InputPropsType[] = [
+    {
+      name: 'email',
+      label: 'Email',
+      placeholder: 'Type your email or telephone',
+    },
+    {
+      name: 'password',
+      label: 'Password',
+      placeholder: 'Type your password',
+      secureTextEntry: true,
+    },
+  ];
+
   return (
     <Image className="flex-1" source={images.backgroundAuth()}>
       <KeyboardAvoidingView
@@ -41,33 +97,20 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
       >
         <View className="flex-1 justify-center p-4 px-8">
           <View className="mb-4 rounded-lg bg-white p-4">
-            <View className="mb-8 items-center">
-              <Image
-                contentFit="contain"
-                className="h-16 w-48"
-                source={images.authLogo()}
-              />
-            </View>
+            <TopImageLogo />
 
-            <ControlledInput
-              testID="email-input"
-              control={control}
-              name="email"
-              label="Email"
-              placeholder="Type your email or telephone"
-              className="text-md mb-2 rounded-lg border bg-white p-3"
-              labelClassname="font-semibold"
-            />
-            <ControlledInput
-              testID="password-input"
-              control={control}
-              name="password"
-              label="Password"
-              placeholder="Type your password"
-              secureTextEntry={true}
-              className="mb-2 rounded-lg border bg-white p-3"
-              labelClassname="font-semibold"
-            />
+            {inputProps.map(({ name, label, placeholder, secureTextEntry }) => (
+              <ControlledInput
+                key={name}
+                testID={`${name}-input`}
+                name={name}
+                label={label}
+                placeholder={placeholder}
+                secureTextEntry={secureTextEntry}
+                {...inputConstants}
+              />
+            ))}
+
             <Button
               testID="login-button"
               label="Log in"
@@ -80,17 +123,7 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
               </Text>
             </View>
           </View>
-          <View className="items-center justify-center rounded-lg bg-white p-4">
-            <Text className="font-medium">Don't have an account?</Text>
-            <Link href="/signup" asChild>
-              <Button
-                testID="signin-button"
-                label="Sing up"
-                className="h-12 w-full rounded-lg border-black"
-                variant="outline"
-              />
-            </Link>
-          </View>
+          <BottomTextComponenent />
         </View>
       </KeyboardAvoidingView>
     </Image>
