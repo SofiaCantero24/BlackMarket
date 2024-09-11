@@ -51,6 +51,7 @@ export interface NInputProps extends TextInputProps {
   label?: string;
   disabled?: boolean;
   error?: string;
+  labelClassname?: string;
 }
 
 type TRule = Omit<
@@ -70,7 +71,7 @@ interface ControlledInputProps<T extends FieldValues>
     InputControllerType<T> {}
 
 export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
-  const { label, error, testID, ...inputProps } = props;
+  const { labelClassname, label, error, testID, ...inputProps } = props;
   const [isFocussed, setIsFocussed] = useState(false);
   const onBlur = useCallback(() => setIsFocussed(false), []);
   const onFocus = useCallback(() => setIsFocussed(true), []);
@@ -82,7 +83,7 @@ export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
         focused: isFocussed,
         disabled: Boolean(props.disabled),
       }),
-    [error, isFocussed, props.disabled]
+    [error, isFocussed, props.disabled],
   );
 
   return (
@@ -90,7 +91,7 @@ export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
       {label && (
         <Text
           testID={testID ? `${testID}-label` : undefined}
-          className={styles.label()}
+          className={(styles.label(), labelClassname)}
         >
           {label}
         </Text>
@@ -123,7 +124,7 @@ export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
 
 // only used with react-hook-form
 export function ControlledInput<T extends FieldValues>(
-  props: ControlledInputProps<T>
+  props: ControlledInputProps<T>,
 ) {
   const { name, control, rules, ...inputProps } = props;
 
