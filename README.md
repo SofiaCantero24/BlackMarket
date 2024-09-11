@@ -18,9 +18,9 @@ Mobile App </h1>
 Clone the repo to your machine and install deps :
 
 ```sh
-git clone https://github.com/user/repo-name
+git clone https://github.com/SofiaCantero24/BlackMarket.git
 
-cd ./repo-name
+cd ./BlackMarket
 
 pnpm install
 ```
