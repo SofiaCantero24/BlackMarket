@@ -37,11 +37,23 @@ export type SingupFormProps = {
   onSubmit?: SubmitHandler<FormType>;
 };
 
-type InputPropsType = {
+type InputConstantsProps = {
+  control: any;
+  className: string;
+  labelClassname: string;
+  showError: boolean;
+};
+
+type InputVariableProps = {
   name: 'name' | 'email' | 'password' | 'confirmPassword';
   label: string;
   placeholder: string;
   secureTextEntry?: boolean;
+};
+
+type InputProps = {
+  inputVariables: InputVariableProps;
+  inputConstants: InputConstantsProps;
 };
 
 const BottomTextComponenent = () => {
@@ -73,18 +85,49 @@ const TopImageLogo = () => {
   );
 };
 
+const ErrorMessageComponent = ({ showError }: { showError: boolean }) => {
+  return (
+    <View className="items-center">
+      {showError && (
+        <Text className="text-error mb-1 mt-2 w-4/5 text-center font-bold">
+          Sorry! Your email or password are incorrect.
+        </Text>
+      )}
+    </View>
+  );
+};
+
+const renderInput = ({ inputVariables, inputConstants }: InputProps) => (
+  <ControlledInput
+    key={inputVariables.name}
+    testID={`${inputVariables.name}-input`}
+    name={inputVariables.name}
+    label={inputVariables.label}
+    placeholder={inputVariables.placeholder}
+    secureTextEntry={inputVariables.secureTextEntry}
+    {...inputConstants}
+  />
+);
+
 export const SignupForm = ({ onSubmit = () => {} }: SingupFormProps) => {
-  const { handleSubmit, control } = useForm<FormType>({
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FormType>({
     resolver: zodResolver(schema),
   });
 
-  const inputConstants = {
+  const hasErrors = Object.keys(errors).length > 0;
+
+  const inputConstants: InputConstantsProps = {
     control,
     className: 'mb-2 rounded-lg border bg-white p-3',
     labelClassname: 'font-semibold',
+    showError: false,
   };
 
-  const inputProps: InputPropsType[] = [
+  const inputProps: InputVariableProps[] = [
     {
       name: 'email',
       label: 'Email',
@@ -115,23 +158,16 @@ export const SignupForm = ({ onSubmit = () => {} }: SingupFormProps) => {
         <View className="flex-1 justify-center p-4 px-8">
           <View className="mb-4 rounded-lg bg-white p-4">
             <TopImageLogo />
-            {inputProps.map(({ name, label, placeholder, secureTextEntry }) => (
-              <ControlledInput
-                key={name}
-                testID={`${name}-input`}
-                name={name}
-                label={label}
-                placeholder={placeholder}
-                secureTextEntry={secureTextEntry}
-                {...inputConstants}
-              />
-            ))}
+            {inputProps.map((inputVariable) =>
+              renderInput({ inputVariables: inputVariable, inputConstants }),
+            )}
             <Button
               testID="signup-button"
               label="Sign up"
               onPress={handleSubmit(onSubmit)}
               className="mb-4 h-14 w-full rounded-lg text-base font-medium"
             />
+            <ErrorMessageComponent showError={hasErrors} />
             <BottomTextComponenent />
           </View>
         </View>

@@ -54,6 +54,7 @@ export interface NInputProps extends TextInputProps {
   disabled?: boolean;
   error?: string;
   labelClassname?: string;
+  showError?: boolean;
 }
 
 type TRule = Omit<
@@ -73,8 +74,15 @@ interface ControlledInputProps<T extends FieldValues>
     InputControllerType<T> {}
 
 export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
-  const { labelClassname, label, error, testID, className, ...inputProps } =
-    props;
+  const {
+    showError,
+    labelClassname,
+    label,
+    error,
+    testID,
+    className,
+    ...inputProps
+  } = props;
   const [isFocussed, setIsFocussed] = useState(false);
   const onBlur = useCallback(() => setIsFocussed(false), []);
   const onFocus = useCallback(() => setIsFocussed(true), []);
@@ -124,7 +132,7 @@ export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
           />
         )}
       </View>
-      {error && (
+      {error && showError && (
         <Text
           testID={testID ? `${testID}-error` : undefined}
           className="text-sm text-danger-400 dark:text-danger-600"
