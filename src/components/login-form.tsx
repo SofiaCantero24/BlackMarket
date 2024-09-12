@@ -40,7 +40,7 @@ const TopImageLogo = () => {
     <View className="mb-8 items-center">
       <Image
         contentFit="contain"
-        className="h-16 w-48"
+        className="mt-4 h-12 w-48"
         source={images.authLogo()}
       />
     </View>
@@ -70,7 +70,7 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
 
   const inputConstants = {
     control,
-    className: 'mb-2 rounded-lg border bg-white p-3',
+    className: 'mb-2 rounded-lg border bg-white p-3 w-full',
     labelClassname: 'font-semibold',
   };
 
@@ -93,7 +93,7 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
       <KeyboardAvoidingView
         className="flex-1"
         behavior="padding"
-        keyboardVerticalOffset={10}
+        keyboardVerticalOffset={-80}
       >
         <View className="flex-1 justify-center p-4 px-8">
           <View className="mb-4 rounded-lg bg-white p-4">

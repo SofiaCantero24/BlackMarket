@@ -9,7 +9,11 @@ import z from 'zod';
 import { Button, ControlledInput, Image, Text, View } from '@/ui';
 
 const schema = z.object({
-  name: z.string().optional(),
+  name: z
+    .string({
+      required_error: 'Name is required',
+    })
+    .email('Invalid Name format'),
   email: z
     .string({
       required_error: 'Email is required',
@@ -62,7 +66,7 @@ const TopImageLogo = () => {
     <View className="mb-8 items-center">
       <Image
         contentFit="contain"
-        className="h-16 w-48"
+        className="mt-4 h-12 w-48"
         source={images.authLogo()}
       />
     </View>
@@ -106,7 +110,7 @@ export const SignupForm = ({ onSubmit = () => {} }: SingupFormProps) => {
       <KeyboardAvoidingView
         className="flex-1"
         behavior="padding"
-        keyboardVerticalOffset={10}
+        keyboardVerticalOffset={-150}
       >
         <View className="flex-1 justify-center p-4 px-8">
           <View className="mb-4 rounded-lg bg-white p-4">

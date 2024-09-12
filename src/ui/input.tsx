@@ -1,3 +1,4 @@
+import images from 'assets/index';
 import { forwardRef, useCallback, useMemo, useState } from 'react';
 import type {
   Control,
@@ -12,6 +13,7 @@ import { TextInput as NTextInput } from 'react-native';
 import { tv } from 'tailwind-variants';
 
 import colors from './colors';
+import { Image } from './image';
 import { Text } from './text';
 
 const inputTv = tv({
@@ -19,7 +21,7 @@ const inputTv = tv({
     container: 'mb-2',
     label: 'text-grey-100 mb-1 text-lg dark:text-neutral-100',
     input:
-      'mt-0 rounded-xl border-[0.5px] border-neutral-300 bg-neutral-100 px-4 py-3 font-inter text-base  font-medium leading-5 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white',
+      'mt-0 rounded-xl border-[0.5px] border-neutral-300 bg-neutral-100 px-4 py-3 font-inter  text-base font-medium leading-5 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white',
   },
 
   variants: {
@@ -71,7 +73,8 @@ interface ControlledInputProps<T extends FieldValues>
     InputControllerType<T> {}
 
 export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
-  const { labelClassname, label, error, testID, ...inputProps } = props;
+  const { labelClassname, label, error, testID, className, ...inputProps } =
+    props;
   const [isFocussed, setIsFocussed] = useState(false);
   const onBlur = useCallback(() => setIsFocussed(false), []);
   const onFocus = useCallback(() => setIsFocussed(true), []);
@@ -96,20 +99,31 @@ export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
           {label}
         </Text>
       )}
-      <NTextInput
-        testID={testID}
-        ref={ref}
-        placeholderTextColor={colors.neutral[400]}
-        className={styles.input()}
-        onBlur={onBlur}
-        onFocus={onFocus}
-        {...inputProps}
-        style={StyleSheet.flatten([
-          { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-          { textAlign: I18nManager.isRTL ? 'right' : 'left' },
-          inputProps.style,
-        ])}
-      />
+      <View
+        className={`w-full flex-auto flex-row items-center justify-between ${className ? className : styles.input()}`}
+      >
+        <NTextInput
+          testID={testID}
+          ref={ref}
+          placeholderTextColor={colors.neutral[400]}
+          onBlur={onBlur}
+          onFocus={onFocus}
+          className="flex-auto"
+          {...inputProps}
+          style={StyleSheet.flatten([
+            { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+            { textAlign: I18nManager.isRTL ? 'right' : 'left' },
+            inputProps.style,
+          ])}
+        />
+        {inputProps.secureTextEntry && (
+          <Image
+            contentFit="contain"
+            className="ml-2 h-6 w-6"
+            source={images.visibilityOff()}
+          />
+        )}
+      </View>
       {error && (
         <Text
           testID={testID ? `${testID}-error` : undefined}
