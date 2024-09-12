@@ -73,6 +73,16 @@ interface ControlledInputProps<T extends FieldValues>
   extends NInputProps,
     InputControllerType<T> {}
 
+const ShowPasswordIcon = () => {
+  return (
+    <Image
+      contentFit="contain"
+      className="ml-2 h-6 w-6"
+      source={images.visibilityOff()}
+    />
+  );
+};
+
 export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
   const {
     showError,
@@ -94,7 +104,7 @@ export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
         focused: isFocussed,
         disabled: Boolean(props.disabled),
       }),
-    [error, isFocussed, props.disabled],
+    [error, isFocussed, props.disabled]
   );
 
   return (
@@ -108,7 +118,9 @@ export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
         </Text>
       )}
       <View
-        className={`w-full flex-auto flex-row items-center justify-between ${className ? className : styles.input()}`}
+        className={`w-full flex-row items-center justify-between ${
+          className ? className : styles.input()
+        }`}
       >
         <NTextInput
           testID={testID}
@@ -124,13 +136,7 @@ export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
             inputProps.style,
           ])}
         />
-        {inputProps.secureTextEntry && (
-          <Image
-            contentFit="contain"
-            className="ml-2 h-6 w-6"
-            source={images.visibilityOff()}
-          />
-        )}
+        {inputProps.secureTextEntry && <ShowPasswordIcon />}
       </View>
       {error && showError && (
         <Text
@@ -146,7 +152,7 @@ export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
 
 // only used with react-hook-form
 export function ControlledInput<T extends FieldValues>(
-  props: ControlledInputProps<T>,
+  props: ControlledInputProps<T>
 ) {
   const { name, control, rules, ...inputProps } = props;
 

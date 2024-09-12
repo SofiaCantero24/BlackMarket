@@ -1,12 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import images from 'assets/index';
+import { ImageBackground as RNImageBackground } from 'expo-image';
 import { Link } from 'expo-router';
+import { cssInterop } from 'nativewind';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import z from 'zod';
 
 import { Button, ControlledInput, Image, Text, View } from '@/ui';
+
+const ImageBackground = cssInterop(RNImageBackground, { className: 'style' });
 
 const schema = z.object({
   name: z.string().optional(),
@@ -79,7 +83,7 @@ const ErrorMessageComponent = ({ showError }: { showError: boolean }) => {
   return (
     <View className="items-center">
       {showError && (
-        <Text className="text-error mb-1 mt-2 w-4/5 text-center font-bold">
+        <Text className="mb-1 mt-2 w-4/5 text-center font-bold text-error">
           Sorry! Your email or password are incorrect.
         </Text>
       )}
@@ -132,17 +136,17 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
   ];
 
   return (
-    <Image className="flex-1" source={images.backgroundAuth()}>
+    <ImageBackground className="flex-1" source={images.backgroundAuth()}>
       <KeyboardAvoidingView
         className="flex-1"
         behavior="padding"
-        keyboardVerticalOffset={-80}
+        keyboardVerticalOffset={-150}
       >
         <View className="flex-1 justify-center p-4 px-8">
           <View className="mb-4 rounded-lg bg-white p-4">
             <TopImageLogo />
             {inputProps.map((inputVariable) =>
-              renderInput({ inputVariables: inputVariable, inputConstants }),
+              renderInput({ inputVariables: inputVariable, inputConstants })
             )}
             <Button
               testID="login-button"
@@ -152,7 +156,7 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
             />
             <ErrorMessageComponent showError={hasErrors} />
             <View className="items-center">
-              <Text className="text-link mt-2 text-base font-bold">
+              <Text className="mt-2 text-base font-bold text-link">
                 I forgot my password
               </Text>
             </View>
@@ -160,6 +164,6 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
           <BottomTextComponenent />
         </View>
       </KeyboardAvoidingView>
-    </Image>
+    </ImageBackground>
   );
 };

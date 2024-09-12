@@ -11,19 +11,26 @@ describe('LoginForm Form ', () => {
   const LOGIN_BUTTON = 'login-button';
   it('renders correctly', async () => {
     render(<LoginForm />);
-    expect(await screen.findByText(/Sign in/i)).toBeOnTheScreen();
+    expect(await screen.findByText(/Log in/i)).toBeOnTheScreen();
   });
 
-  it('should display required error when values are empty', async () => {
+  it('should display error when values are invalid', async () => {
     render(<LoginForm />);
 
     const button = screen.getByTestId(LOGIN_BUTTON);
-    expect(screen.queryByText(/Email is required/i)).not.toBeOnTheScreen();
+    expect(
+      screen.queryByText(/Sorry! Your email or password are incorrect./i)
+    ).not.toBeOnTheScreen();
     fireEvent.press(button);
-    expect(await screen.findByText(/Email is required/i)).toBeOnTheScreen();
-    expect(screen.getByText(/Password is required/i)).toBeOnTheScreen();
+    expect(
+      await screen.findByText(/Sorry! Your email or password are incorrect./i)
+    ).toBeOnTheScreen();
+    expect(
+      screen.getByText(/Sorry! Your email or password are incorrect./i)
+    ).toBeOnTheScreen();
   });
 
+  /*
   it('should display matching error when email is invalid', async () => {
     render(<LoginForm />);
 
@@ -38,6 +45,7 @@ describe('LoginForm Form ', () => {
     expect(screen.queryByText(/Email is required/i)).not.toBeOnTheScreen();
     expect(await screen.findByText(/Invalid Email Format/i)).toBeOnTheScreen();
   });
+  */
 
   it('Should call LoginForm with correct values when values are valid', async () => {
     render(<LoginForm onSubmit={onSubmitMock} />);

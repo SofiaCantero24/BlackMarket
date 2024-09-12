@@ -5,7 +5,7 @@ import { SignupForm } from '@/components/signup-form';
 import { useAuth } from '@/core';
 import { FocusAwareStatusBar } from '@/ui';
 
-export default function Login() {
+export default function Signup() {
   const router = useRouter();
   const signIn = useAuth.use.signIn();
 
