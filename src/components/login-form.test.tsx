@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@/core/test-utils';
+import type { LoginFormProps } from '@/types/auth/auth-types';
 
-import type { LoginFormProps } from './login-form';
 import { LoginForm } from './login-form';
 
 afterEach(cleanup);
