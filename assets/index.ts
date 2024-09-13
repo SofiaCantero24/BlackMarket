@@ -5,6 +5,4 @@ const images = {
 };
 
 export type Images = keyof typeof images;
-export default {
-  ...images,
-};
+export default images;

@@ -1,4 +1,4 @@
-import images from 'assets/index';
+import images from 'assets';
 import { forwardRef, useCallback, useMemo, useState } from 'react';
 import type {
   Control,

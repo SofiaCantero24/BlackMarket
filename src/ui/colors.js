@@ -76,5 +76,5 @@ module.exports = {
     900: '#7F1D1D',
   },
   link: '#076CE0',
-  error: '#D42F1A'
+  error: '#D42F1A',
 };

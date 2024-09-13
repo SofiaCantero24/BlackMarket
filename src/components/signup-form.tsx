@@ -1,64 +1,22 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import images from 'assets/index';
+import images from 'assets';
 import { ImageBackground as RNImageBackground } from 'expo-image';
 import { Link } from 'expo-router';
 import { cssInterop } from 'nativewind';
-import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
-import z from 'zod';
 
+import type {
+  InputConstantsProps,
+  InputProps,
+  InputVariableProps,
+  SignupFormType,
+  SingupFormProps,
+} from '@/types/auth/auth-types';
+import { signupSchema } from '@/types/auth/auth-types';
 import { Button, ControlledInput, Image, Text, View } from '@/ui';
 
 const ImageBackground = cssInterop(RNImageBackground, { className: 'style' });
-
-const schema = z.object({
-  name: z
-    .string({
-      required_error: 'Name is required',
-    })
-    .email('Invalid Name format'),
-  email: z
-    .string({
-      required_error: 'Email is required',
-    })
-    .email('Invalid email format'),
-  password: z
-    .string({
-      required_error: 'Password is required',
-    })
-    .min(6, 'Password must be at least 6 characters'),
-  confirmPassword: z
-    .string({
-      required_error: 'Confirm password is required',
-    })
-    .min(6, 'Confirm Password must be at least 6 characters'),
-});
-
-export type FormType = z.infer<typeof schema>;
-
-export type SingupFormProps = {
-  onSubmit?: SubmitHandler<FormType>;
-};
-
-type InputConstantsProps = {
-  control: any;
-  className: string;
-  labelClassname: string;
-  showError: boolean;
-};
-
-type InputVariableProps = {
-  name: 'name' | 'email' | 'password' | 'confirmPassword';
-  label: string;
-  placeholder: string;
-  secureTextEntry?: boolean;
-};
-
-type InputProps = {
-  inputVariables: InputVariableProps;
-  inputConstants: InputConstantsProps;
-};
 
 const BottomTextComponenent = () => {
   return (
@@ -118,8 +76,8 @@ export const SignupForm = ({ onSubmit = () => {} }: SingupFormProps) => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<FormType>({
-    resolver: zodResolver(schema),
+  } = useForm<SignupFormType>({
+    resolver: zodResolver(signupSchema),
   });
 
   const hasErrors = Object.keys(errors).length > 0;
