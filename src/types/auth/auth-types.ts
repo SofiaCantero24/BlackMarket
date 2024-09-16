@@ -24,11 +24,9 @@ export type LoginFormProps = {
 
 // Signup schema
 export const signupSchema = z.object({
-  name: z
-    .string({
-      required_error: 'Name is required',
-    })
-    .email('Invalid Name format'),
+  name: z.string({
+    required_error: 'Name is required',
+  }),
   email: z
     .string({
       required_error: 'Email is required',
@@ -39,7 +37,7 @@ export const signupSchema = z.object({
       required_error: 'Password is required',
     })
     .min(6, 'Password must be at least 6 characters'),
-  confirmPassword: z
+  password_confirmation: z
     .string({
       required_error: 'Confirm password is required',
     })
@@ -61,7 +59,7 @@ export type InputConstantsProps = {
 };
 
 export type InputVariableProps = {
-  name: 'name' | 'email' | 'password' | 'confirmPassword';
+  name: 'name' | 'email' | 'password' | 'password_confirmation';
   label: string;
   placeholder: string;
   secureTextEntry?: boolean;
