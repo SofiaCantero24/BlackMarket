@@ -12,6 +12,7 @@ import { I18nManager, StyleSheet, View } from 'react-native';
 import { TextInput as NTextInput } from 'react-native';
 import { tv } from 'tailwind-variants';
 
+import { Button } from './button';
 import colors from './colors';
 import { Image } from './image';
 import { Text } from './text';
@@ -57,6 +58,18 @@ export interface NInputProps extends TextInputProps {
   showError?: boolean;
 }
 
+interface ShowPasswordIconProps {
+  onPress: () => void;
+  showIcon: boolean | undefined;
+  showPassword: boolean;
+}
+
+interface ErrorLabelProps {
+  error: string | undefined;
+  showError: boolean | undefined;
+  testID: string | undefined;
+}
+
 type TRule = Omit<
   RegisterOptions,
   'valueAsNumber' | 'valueAsDate' | 'setValueAs'
@@ -73,13 +86,43 @@ interface ControlledInputProps<T extends FieldValues>
   extends NInputProps,
     InputControllerType<T> {}
 
-const ShowPasswordIcon = () => {
+const ShowPasswordIcon = ({
+  showIcon,
+  onPress,
+  showPassword,
+}: ShowPasswordIconProps) => {
   return (
-    <Image
-      contentFit="contain"
-      className="ml-2 h-6 w-6"
-      source={images.visibilityOff()}
-    />
+    <>
+      {showIcon && (
+        <Button
+          onPress={onPress}
+          className="m-0 h-4 flex-row bg-transparent p-0"
+        >
+          <Image
+            contentFit="contain"
+            className="h-4 w-6"
+            source={
+              showPassword ? images.visibilityOn() : images.visibilityOff()
+            }
+          />
+        </Button>
+      )}
+    </>
+  );
+};
+
+const ErrorMessage = ({ error, showError, testID }: ErrorLabelProps) => {
+  return (
+    <>
+      {error && showError && (
+        <Text
+          testID={testID ? `${testID}-error` : undefined}
+          className="text-sm text-danger-400 dark:text-danger-600"
+        >
+          {error}
+        </Text>
+      )}
+    </>
   );
 };
 
@@ -91,9 +134,11 @@ export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
     error,
     testID,
     className,
+    secureTextEntry,
     ...inputProps
   } = props;
   const [isFocussed, setIsFocussed] = useState(false);
+  const [showContent, setShowContent] = useState(false);
   const onBlur = useCallback(() => setIsFocussed(false), []);
   const onFocus = useCallback(() => setIsFocussed(true), []);
 
@@ -129,6 +174,7 @@ export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
           onBlur={onBlur}
           onFocus={onFocus}
           className="flex-auto"
+          secureTextEntry={secureTextEntry && !showContent}
           {...inputProps}
           style={StyleSheet.flatten([
             { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
@@ -136,16 +182,15 @@ export const Input = forwardRef<TextInput, NInputProps>((props, ref) => {
             inputProps.style,
           ])}
         />
-        {inputProps.secureTextEntry && <ShowPasswordIcon />}
+        <ShowPasswordIcon
+          onPress={() => {
+            setShowContent((prev) => !prev);
+          }}
+          showIcon={secureTextEntry}
+          showPassword={showContent}
+        />
       </View>
-      {error && showError && (
-        <Text
-          testID={testID ? `${testID}-error` : undefined}
-          className="text-sm text-danger-400 dark:text-danger-600"
-        >
-          {error}
-        </Text>
-      )}
+      <ErrorMessage error={error} showError={showError} testID={testID} />
     </View>
   );
 });

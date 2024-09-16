@@ -103,7 +103,7 @@ export const SignupForm = ({ onSubmit = () => {} }: SingupFormProps) => {
       secureTextEntry: true,
     },
     {
-      name: 'confirmPassword',
+      name: 'password_confirmation',
       label: 'Confirm Password',
       placeholder: 'Re-type your password',
       secureTextEntry: true,
