@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 import { createSelectors } from '../utils';
 import type { TokenType } from './utils';
-import { getToken, removeToken, setToken } from './utils';
+import { removeToken, setToken } from './utils';
 
 interface AuthState {
   token: TokenType | null;
@@ -25,7 +25,7 @@ const _useAuth = create<AuthState>((set, get) => ({
   },
   hydrate: () => {
     try {
-      const userToken = getToken();
+      const userToken = null; // getToken();
       if (userToken !== null) {
         get().signIn(userToken);
       } else {
