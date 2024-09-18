@@ -1,14 +1,62 @@
-/* eslint-disable react/no-unstable-nested-components */
-import { Link, Redirect, SplashScreen, Tabs } from 'expo-router';
+import { Redirect, SplashScreen, Tabs } from 'expo-router';
 import { useCallback, useEffect } from 'react';
 
 import { useAuth, useIsFirstTime } from '@/core';
-import { Pressable, Text } from '@/ui';
+import { colors, View } from '@/ui';
 import {
-  Feed as FeedIcon,
-  Settings as SettingsIcon,
-  Style as StyleIcon,
+  Cart as CartIcon,
+  Favorite as FavoriteIcon,
+  Home as HomeIcon,
+  Menu as MenuIcon,
+  Sell as SellIcon,
 } from '@/ui/icons';
+
+const renderIcon = (
+  IconComponent: React.ComponentType<{ color: string }>,
+  color: string,
+  focused: boolean
+) => (
+  <View className={focused ? 'rounded-full bg-light_gray p-3' : 'p-3'}>
+    <IconComponent color={color} />
+  </View>
+);
+
+const tabs = [
+  {
+    name: 'index',
+    title: 'Feed',
+    icon: HomeIcon,
+    testID: 'feed-tab',
+  },
+  {
+    name: 'style',
+    title: 'Style',
+    icon: SellIcon,
+    testID: 'style-tab',
+    headerShown: false,
+  },
+  {
+    name: 'settings',
+    title: 'Settings',
+    icon: CartIcon,
+    testID: 'settings-tab',
+    headerShown: false,
+  },
+  {
+    name: 'shopping-cart',
+    title: 'Settings',
+    icon: FavoriteIcon,
+    testID: 'setting-tab',
+    headerShown: false,
+  },
+  {
+    name: 'favorites',
+    title: 'Settings',
+    icon: MenuIcon,
+    testID: 'settin-tab',
+    headerShown: false,
+  },
+];
 
 export default function TabLayout() {
   const status = useAuth.use.status();
@@ -30,46 +78,33 @@ export default function TabLayout() {
   if (status === 'signOut') {
     return <Redirect href="/login" />;
   }
-  return (
-    <Tabs>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Feed',
-          tabBarIcon: ({ color }) => <FeedIcon color={color} />,
-          headerRight: () => <CreateNewPostLink />,
-          tabBarTestID: 'feed-tab',
-        }}
-      />
 
-      <Tabs.Screen
-        name="style"
-        options={{
-          title: 'Style',
-          headerShown: false,
-          tabBarIcon: ({ color }) => <StyleIcon color={color} />,
-          tabBarTestID: 'style-tab',
-        }}
-      />
-      <Tabs.Screen
-        name="settings"
-        options={{
-          title: 'Settings',
-          headerShown: false,
-          tabBarIcon: ({ color }) => <SettingsIcon color={color} />,
-          tabBarTestID: 'settings-tab',
-        }}
-      />
+  return (
+    <Tabs
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: colors.dark_violet,
+          paddingTop: 10,
+          paddingBottom: 25,
+        },
+        tabBarActiveTintColor: colors.dark_violet,
+        tabBarInactiveTintColor: colors.white,
+        tabBarShowLabel: false,
+      }}
+    >
+      {tabs.map(({ name, title, icon, testID, headerShown = true }) => (
+        <Tabs.Screen
+          key={name}
+          name={name}
+          options={{
+            title,
+            tabBarIcon: ({ color, focused }) =>
+              renderIcon(icon, color, focused),
+            tabBarTestID: testID,
+            headerShown,
+          }}
+        />
+      ))}
     </Tabs>
   );
 }
-
-const CreateNewPostLink = () => {
-  return (
-    <Link href="/feed/add-post" asChild>
-      <Pressable>
-        <Text className="px-3 text-primary-300">Create</Text>
-      </Pressable>
-    </Link>
-  );
-};
