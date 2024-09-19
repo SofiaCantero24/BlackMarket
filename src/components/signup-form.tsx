@@ -6,17 +6,34 @@ import { cssInterop } from 'nativewind';
 import { useForm } from 'react-hook-form';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
-import {
-  type InputConstantsProps,
-  type InputProps,
-  type InputVariableProps,
-  type LoginFormProps,
-  type LoginFormType,
+import type {
+  InputConstantsProps,
+  InputProps,
+  InputVariableProps,
+  SignupFormType,
+  SingupFormProps,
 } from '@/types/auth/auth-types';
-import { loginSchema } from '@/types/auth/auth-types';
+import { signupSchema } from '@/types/auth/auth-types';
 import { Button, ControlledInput, Image, Text, View } from '@/ui';
 
 const ImageBackground = cssInterop(RNImageBackground, { className: 'style' });
+
+const BottomTextComponenent = () => {
+  return (
+    <View className="items-center">
+      <Text className="mb-4 w-3/4 items-center text-center text-base font-normal">
+        By signing up, you accept the
+        <Text className="font-bold text-link"> Data Policy.</Text>
+      </Text>
+      <Text className="mb-2 items-center text-center text-base font-normal">
+        Already have an account?
+        <Link href="/login">
+          <Text className="font-bold text-link"> Log in</Text>
+        </Link>
+      </Text>
+    </View>
+  );
+};
 
 const TopImageLogo = () => {
   return (
@@ -26,22 +43,6 @@ const TopImageLogo = () => {
         className="mt-4 h-12 w-48"
         source={images.authLogo()}
       />
-    </View>
-  );
-};
-
-const BottomTextComponenent = () => {
-  return (
-    <View className="items-center justify-center rounded-lg bg-white p-4">
-      <Text className="font-medium">Don't have an account?</Text>
-      <Link href="/signup" asChild>
-        <Button
-          testID="signin-button"
-          label="Sing up"
-          className="h-12 w-full rounded-lg border-black"
-          variant="outline"
-        />
-      </Link>
     </View>
   );
 };
@@ -70,20 +71,20 @@ const renderInput = ({ inputVariables, inputConstants }: InputProps) => (
   />
 );
 
-export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
+export const SignupForm = ({ onSubmit = () => {} }: SingupFormProps) => {
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<LoginFormType>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<SignupFormType>({
+    resolver: zodResolver(signupSchema),
   });
 
   const hasErrors = Object.keys(errors).length > 0;
 
   const inputConstants: InputConstantsProps = {
     control,
-    className: 'mb-2 rounded-lg border bg-white p-3 w-full',
+    className: 'mb-2 rounded-lg border bg-white p-3',
     labelClassname: 'font-semibold',
     showError: false,
   };
@@ -94,10 +95,17 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
       label: 'Email',
       placeholder: 'Type your email or telephone',
     },
+    { name: 'name', label: 'Full Name', placeholder: 'Type your full name' },
     {
       name: 'password',
       label: 'Password',
       placeholder: 'Type your password',
+      secureTextEntry: true,
+    },
+    {
+      name: 'password_confirmation',
+      label: 'Confirm Password',
+      placeholder: 'Re-type your password',
       secureTextEntry: true,
     },
   ];
@@ -116,19 +124,14 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
               renderInput({ inputVariables: inputVariable, inputConstants })
             )}
             <Button
-              testID="login-button"
-              label="Log in"
+              testID="signup-button"
+              label="Sign up"
               onPress={handleSubmit(onSubmit)}
-              className="mb-2 h-14 w-full rounded-lg text-base font-medium"
+              className="mb-4 h-14 w-full rounded-lg text-base font-medium"
             />
             <ErrorMessageComponent showError={hasErrors} />
-            <View className="items-center">
-              <Text className="mt-2 text-base font-bold text-link">
-                I forgot my password
-              </Text>
-            </View>
+            <BottomTextComponenent />
           </View>
-          <BottomTextComponenent />
         </View>
       </KeyboardAvoidingView>
     </ImageBackground>
