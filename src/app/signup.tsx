@@ -9,7 +9,7 @@ import { FocusAwareStatusBar, showErrorMessage } from '@/ui';
 
 export default function Signup() {
   const router = useRouter();
-  const signIn = useAuth.use.signIn();
+  const saveSession = useAuth.use.signIn();
 
   const { mutate: signup, error } = useSignup();
 
@@ -26,14 +26,14 @@ export default function Signup() {
       {
         onSuccess: (response) => {
           showMessage({
-            message: 'succes',
+            message: 'success',
             type: 'success',
           });
 
           const authorizationHeader = response.headers.authorization;
 
           if (authorizationHeader) {
-            signIn(authorizationHeader.toString());
+            saveSession(authorizationHeader.toString());
             router.push('/(app)');
           }
         },
