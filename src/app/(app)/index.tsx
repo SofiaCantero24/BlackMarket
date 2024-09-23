@@ -1,35 +1,29 @@
-import { FlashList } from '@shopify/flash-list';
-import { useCallback } from 'react';
+import images from 'assets';
 
-import type { Post } from '@/api';
-import { usePosts } from '@/api';
-import { Card } from '@/components/card';
-import { EmptyList, FocusAwareStatusBar, Text, View } from '@/ui';
+import { Image, Input, SafeAreaView, View } from '@/ui';
 
 export default function Feed() {
-  const { data, isPending, isError } = usePosts();
-  const renderItem = useCallback(
-    ({ item }: { item: Post }) => <Card {...item} />,
-    []
-  );
-
-  if (isError) {
-    return (
-      <View>
-        <Text> Error Loading data </Text>
-      </View>
-    );
-  }
   return (
-    <View className="flex-1 ">
-      <FocusAwareStatusBar />
-      <FlashList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(_, index) => `item-${index}`}
-        ListEmptyComponent={<EmptyList isLoading={isPending} />}
-        estimatedItemSize={300}
-      />
-    </View>
+    <SafeAreaView>
+      <Image source={images.header()} className="h-14 w-full" />
+      <View className="w-full flex-row items-center bg-light_gray px-4 py-2">
+        <View className="h-12 w-full flex-row items-center justify-between rounded-lg border-[0.5px] border-neutral-400 bg-white pl-2 pr-8">
+          <View className="w-full flex-row items-center">
+            <Input
+              placeholder="Search for products"
+              className="-mb-2 p-2 text-black"
+              placeholderTextColor="#000000"
+            />
+          </View>
+          <View className="flex-row">
+            <Image
+              contentFit="contain"
+              source={images.search()}
+              className="mr-2 h-4 w-4"
+            />
+          </View>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 }

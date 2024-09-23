@@ -3,6 +3,8 @@ const images = {
   authLogo: () => require('./auth/auth-logo.png'),
   visibilityOff: () => require('./auth/visibility-off.png'),
   visibilityOn: () => require('./auth/visibility-on.png'),
+  header: () => require('./header.png'),
+  search: () => require('./search.png'),
 };
 
 export type Images = keyof typeof images;

@@ -27,6 +27,7 @@ const tabs = [
     title: 'Feed',
     icon: HomeIcon,
     testID: 'feed-tab',
+    headerShown: false,
   },
   {
     name: 'style',
