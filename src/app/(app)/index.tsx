@@ -1,12 +1,11 @@
-import images from 'assets';
-
+import { HeaderLogo } from '@/components/header-logo';
 import { SearchBar } from '@/components/search-bar';
-import { Image, SafeAreaView } from '@/ui';
+import { SafeAreaView } from '@/ui';
 
 export default function Feed() {
   return (
     <SafeAreaView>
-      <Image source={images.header()} className="h-14 w-full" />
+      <HeaderLogo />
       <SearchBar />
     </SafeAreaView>
   );

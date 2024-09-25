@@ -5,6 +5,7 @@ const images = {
   visibilityOn: () => require('./auth/visibility-on.png'),
   header: () => require('./header.png'),
   search: () => require('./search.png'),
+  dummyProduct: () => require('./dummy-product.png'),
 };
 
 export type Images = keyof typeof images;
