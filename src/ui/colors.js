@@ -79,4 +79,5 @@ module.exports = {
   error: '#D42F1A',
   dark_violet: '#00031A',
   light_gray: '#E0E0E0',
+  restored: '#559F21',
 };

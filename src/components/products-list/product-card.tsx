@@ -39,7 +39,7 @@ export const ProductCard = ({ name, price, status }: ProductCardProps) => {
             </View>
           </View>
           <View className="mt-1 flex-row items-center space-x-2">
-            <View className="rounded-md rounded-tl-none bg-green-500 px-2 py-1">
+            <View className="rounded-md rounded-tl-none bg-restored px-2 py-1">
               <Text className="text-xs font-semibold text-white">{status}</Text>
             </View>
           </View>
