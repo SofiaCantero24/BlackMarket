@@ -6,6 +6,7 @@ const images = {
   header: () => require('./header.png'),
   search: () => require('./search.png'),
   dummyProduct: () => require('./dummy-product.png'),
+  filterIcon: () => require('./filter_list.png'),
 };
 
 export type Images = keyof typeof images;
