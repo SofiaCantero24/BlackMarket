@@ -83,7 +83,7 @@ export default function ProducList() {
             </View>
           </ScrollView>
         </View>
-        <View className="absolute bottom-16 flex w-full items-center justify-center pb-20">
+        <View className="absolute bottom-14 flex w-full items-center justify-center pb-20">
           <TouchableOpacity className="flex-row items-center gap-4 rounded-full bg-dark_violet p-4 px-6">
             <Text className="text-lg font-bold text-white">Filers</Text>
             <Image className="h-4 w-4" source={images.filterIcon()} />
