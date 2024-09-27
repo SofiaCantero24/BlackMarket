@@ -77,4 +77,6 @@ module.exports = {
   },
   link: '#076CE0',
   error: '#D42F1A',
+  dark_violet: '#00031A',
+  light_gray: '#E0E0E0',
 };
