@@ -27,12 +27,13 @@ const tabs = [
     title: 'Feed',
     icon: HomeIcon,
     testID: 'feed-tab',
+    headerShown: false,
   },
   {
-    name: 'style',
-    title: 'Style',
+    name: 'product-list',
+    title: 'product-list',
     icon: SellIcon,
-    testID: 'style-tab',
+    testID: 'product-list-tab',
     headerShown: false,
   },
   {
