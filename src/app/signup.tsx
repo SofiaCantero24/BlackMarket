@@ -3,13 +3,11 @@ import { showMessage } from 'react-native-flash-message';
 
 import { useSignup } from '@/api/auth/use-signup';
 import { SignupForm } from '@/components/signup-form';
-import { useAuth } from '@/core';
 import type { SingupFormProps } from '@/types/auth/auth-types';
 import { FocusAwareStatusBar, showErrorMessage } from '@/ui';
 
 export default function Signup() {
   const router = useRouter();
-  const saveSession = useAuth.use.signIn();
 
   const { mutate: signup, error } = useSignup();
 
@@ -24,18 +22,12 @@ export default function Signup() {
         },
       },
       {
-        onSuccess: (response) => {
+        onSuccess: () => {
           showMessage({
             message: 'success',
             type: 'success',
           });
-
-          const authorizationHeader = response.headers.authorization;
-
-          if (authorizationHeader) {
-            saveSession(authorizationHeader.toString());
-            router.push('/(app)');
-          }
+          router.push('/(app)');
         },
         onError: () => {
           showErrorMessage(error?.cause?.message);

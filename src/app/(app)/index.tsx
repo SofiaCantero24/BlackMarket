@@ -6,7 +6,7 @@ export default function Feed() {
   return (
     <SafeAreaView>
       <HeaderLogo />
-      <SearchBar />
+      <SearchBar setQuery={() => {}} query={''} />
     </SafeAreaView>
   );
 }
