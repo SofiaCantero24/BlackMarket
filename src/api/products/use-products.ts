@@ -6,9 +6,11 @@ import type { FetchProductsResponse } from './types';
 
 type Response = FetchProductsResponse;
 
-export const useProducts = createQuery<Response, AxiosError>({
+export const useProducts = createQuery<Response, { page: number }, AxiosError>({
   queryKey: ['products'],
-  fetcher: () => {
-    return client.get(`products`).then((response) => response.data);
+  fetcher: ({ page }) => {
+    return client
+      .get(`products?page=${page}&items=7`)
+      .then((response) => response.data);
   },
 });
