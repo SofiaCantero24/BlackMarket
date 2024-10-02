@@ -9,10 +9,10 @@ import { FocusAwareStatusBar, showErrorMessage } from '@/ui';
 export default function Login() {
   const router = useRouter();
 
-  const { mutate: singin, error } = useSignin();
+  const { mutate: signin, error } = useSignin();
 
   const onSubmit: LoginFormProps['onSubmit'] = (data) => {
-    singin(
+    signin(
       {
         user: {
           email: data.email,
@@ -22,7 +22,7 @@ export default function Login() {
       {
         onSuccess: () => {
           showMessage({
-            message: 'succes',
+            message: 'success',
             type: 'success',
           });
 

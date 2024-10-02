@@ -24,9 +24,10 @@ export default function Signup() {
       {
         onSuccess: () => {
           showMessage({
-            message: 'succes',
+            message: 'success',
             type: 'success',
           });
+
           router.push('/(app)');
         },
         onError: () => {
