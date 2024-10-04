@@ -1,18 +1,25 @@
 import images from 'assets';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Image, Input, View } from '@/ui';
 
 type SearchBarProps = {
   onProductSelect: (query: string) => void;
+  cleanQuery: boolean;
 };
 
-export const SearchBar = ({ onProductSelect }: SearchBarProps) => {
+export const SearchBar = ({ onProductSelect, cleanQuery }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = () => {
     onProductSelect(searchTerm);
   };
+
+  useEffect(() => {
+    if (cleanQuery) {
+      setSearchTerm('');
+    }
+  }, [cleanQuery]);
 
   return (
     <View className="w-full flex-row items-center bg-light_gray px-4 py-2">

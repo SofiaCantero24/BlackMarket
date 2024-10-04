@@ -23,7 +23,7 @@ type PageControllerProps = {
 type HandlePageProps = {
   data: FetchProductsResponse;
   page: number;
-  query: string | undefined;
+  query: string;
   filteredProducts: Product[];
   setPage: React.Dispatch<React.SetStateAction<number>>;
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
@@ -96,12 +96,22 @@ const ProductsList = ({ products }: { products: Product[] }) => {
   );
 };
 
-const FiltersButton = ({ products }: { products: Product[] }) => {
+const FiltersButton = ({
+  products,
+  query,
+}: {
+  products: Product[];
+  query: string;
+}) => {
   if (products.length === 0) {
     return;
   }
   return (
-    <View className="absolute bottom-28 flex w-auto items-center justify-center self-center pb-20">
+    <View
+      className={`absolute ${
+        query === '' ? 'bottom-20' : 'bottom-28'
+      } flex w-auto items-center justify-center self-center pb-20`}
+    >
       <TouchableOpacity className="flex-row items-center gap-4 rounded-full bg-dark_violet p-4 px-8">
         <Text className="text-lg font-bold text-white">Filers</Text>
         <Image className="h-4 w-4" source={images.filterIcon()} />
@@ -114,7 +124,7 @@ const SearchResult = ({
   query,
   clearQuery,
 }: {
-  query: string | undefined;
+  query: string;
   clearQuery: () => void;
 }) => {
   if (query) {
@@ -139,7 +149,7 @@ const handleNextPage = ({
   setPage,
 }: HandlePageProps) => {
   const hasMoreProducts =
-    query === undefined || query === ''
+    query === ''
       ? data.data.length > page * 7
       : filteredProducts.length > page * 7;
 
@@ -156,15 +166,14 @@ const handlePrevPage = ({ page, setPage }: HandlePageProps) => {
 
 export default function ProducList() {
   const [page, setPage] = useState(1);
-  const { data } = useProducts({
-    variables: { page: 1, items: 1000 },
-  });
+  const { data } = useProducts({ variables: { page: 1, items: 100 } });
   const [products, setProducts] = useState<Product[]>([]);
   const [query, setQuery] = useState<string>('');
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [shouldReset, setShouldReset] = useState(false);
 
   useEffect(() => {
-    if (data && (query === undefined || query === '')) {
+    if (data && query === '') {
       setProducts(data.data.slice((page - 1) * 7, page * 7));
     } else {
       setProducts(filteredProducts.slice((page - 1) * 7, page * 7));
@@ -174,6 +183,13 @@ export default function ProducList() {
   if (data === undefined) {
     return null;
   }
+
+  const resetSearchBar = () => {
+    setProducts(data.data.slice(0, 7));
+    setShouldReset(true);
+    setQuery('');
+    setTimeout(() => setShouldReset(false), 100);
+  };
 
   const handleProductSelect = (searchQuery: string) => {
     const queryProducts = data.data.filter((product) =>
@@ -189,18 +205,15 @@ export default function ProducList() {
     <>
       <SafeAreaView className="flex-1">
         <HeaderLogo />
-        <SearchBar onProductSelect={handleProductSelect} />
-        <SearchResult
-          query={query}
-          clearQuery={() => {
-            setQuery('');
-            setProducts(data.data.slice(0, 7));
-          }}
+        <SearchBar
+          onProductSelect={handleProductSelect}
+          cleanQuery={shouldReset}
         />
+        <SearchResult query={query} clearQuery={resetSearchBar} />
         <View>
           <ScrollView
             contentContainerStyle={{
-              paddingBottom: query === undefined || query === '' ? 200 : 280,
+              paddingBottom: query === '' ? 200 : 280,
             }}
           >
             <ProductsList products={products} />
@@ -216,7 +229,7 @@ export default function ProducList() {
             />
           </ScrollView>
         </View>
-        <FiltersButton products={products} />
+        <FiltersButton products={products} query={query} />
       </SafeAreaView>
     </>
   );

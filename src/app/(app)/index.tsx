@@ -6,7 +6,7 @@ export default function Feed() {
   return (
     <SafeAreaView>
       <HeaderLogo />
-      <SearchBar onProductSelect={() => {}} />
+      <SearchBar onProductSelect={() => {}} cleanQuery={true} />
     </SafeAreaView>
   );
 }

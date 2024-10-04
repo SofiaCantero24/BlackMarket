@@ -20,7 +20,7 @@ export const ProductCard = ({
       <View className="w-full flex-row items-center space-x-4">
         <Image
           source={{ uri: image_url }}
-          className="flex h-36 w-36"
+          className="flex h-32 w-32"
           contentFit="contain"
         />
         <View className="w-full flex-1 px-4">
