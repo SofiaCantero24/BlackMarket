@@ -1,16 +1,33 @@
 import images from 'assets';
+import { useState } from 'react';
 
 import { Image, Input, View } from '@/ui';
 
-export const SearchBar = () => {
+type SearchBarProps = {
+  onProductSelect: (query: string) => void;
+};
+
+export const SearchBar = ({ onProductSelect }: SearchBarProps) => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = () => {
+    onProductSelect(searchTerm);
+  };
+
   return (
     <View className="w-full flex-row items-center bg-light_gray px-4 py-2">
       <View className="h-12 w-full flex-row items-center justify-between rounded-lg border-[0.5px] border-neutral-400 bg-white pl-2 pr-8">
-        <View className="w-full flex-row items-center">
+        <View className="flex w-full items-center">
           <Input
             placeholder="Search for products"
-            className="-mb-2 p-2 text-black"
+            className="-mb-2 flex-1 p-2 text-black"
             placeholderTextColor="#000000"
+            value={searchTerm}
+            onChangeText={setSearchTerm}
+            onSubmitEditing={() => {
+              setSearchTerm(searchTerm);
+              handleSearch();
+            }}
           />
         </View>
         <View className="flex-row">
