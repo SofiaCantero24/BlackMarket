@@ -1,100 +1,12 @@
 import images from 'assets';
 import { useEffect, useState } from 'react';
 
-import type { FetchProductsResponse, Product } from '@/api/products/types';
+import type { Product } from '@/api/products/types';
 import { useProducts } from '@/api/products/use-products';
 import { HeaderLogo } from '@/components/header-logo';
-import { ProductCard } from '@/components/products-list/product-card';
+import { ProductListScrollView } from '@/components/products-list/products-scroll-view';
 import { SearchBar } from '@/components/search-bar';
-import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from '@/ui';
-
-type PageControllerProps = {
-  handlePrevPage: (props: HandlePageProps) => void;
-  handleNextPage: (props: HandlePageProps) => void;
-};
-
-type HandlePageProps = {
-  data: FetchProductsResponse;
-  page: number;
-  query: string;
-  filteredProducts: Product[];
-  setPage: React.Dispatch<React.SetStateAction<number>>;
-  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
-};
-
-const PageController = ({
-  handlePrevPage,
-  handleNextPage,
-  data,
-  page,
-  query,
-  filteredProducts,
-  setPage,
-  setProducts,
-}: PageControllerProps & HandlePageProps) => {
-  const handlePageProps = {
-    data,
-    page,
-    query,
-    filteredProducts,
-    setPage,
-    setProducts,
-  };
-  return (
-    <View className="flex-row justify-between px-5 pb-2">
-      <TouchableOpacity
-        onPress={() => handlePrevPage(handlePageProps)}
-        className={`rounded-3xl bg-dark_violet p-4 px-6`}
-      >
-        <Text className="text-lg text-white">Previous</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => handleNextPage(handlePageProps)}
-        className={`rounded-3xl bg-dark_violet p-4 px-6`}
-      >
-        <Text className="text-lg text-white">Next</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-const ProductsList = ({ products }: { products: Product[] }) => {
-  if (products.length === 0) {
-    return (
-      <View className="m-4 gap-4 self-center text-4xl font-semibold">
-        <Text>No products found</Text>
-      </View>
-    );
-  }
-
-  return (
-    <View className="m-4 gap-4 rounded-lg border">
-      {products.map((product, index) => (
-        <View key={index}>
-          <View>
-            <ProductCard
-              id={product.id}
-              price={product.unit_price}
-              state={product.state}
-              name={product.title}
-              image_url={product.pictures[0]}
-            />
-          </View>
-          {index < products.length - 1 && (
-            <View className="h-px w-full bg-black" />
-          )}
-        </View>
-      ))}
-    </View>
-  );
-};
+import { Image, SafeAreaView, Text, TouchableOpacity, View } from '@/ui';
 
 const FiltersButton = ({
   products,
@@ -141,29 +53,6 @@ const SearchResult = ({
   }
 };
 
-const handleNextPage = ({
-  data,
-  page,
-  query,
-  filteredProducts,
-  setPage,
-}: HandlePageProps) => {
-  const hasMoreProducts =
-    query === ''
-      ? data.data.length > page * 7
-      : filteredProducts.length > page * 7;
-
-  if (hasMoreProducts) {
-    setPage((prevPage) => prevPage + 1);
-  }
-};
-
-const handlePrevPage = ({ page, setPage }: HandlePageProps) => {
-  if (page > 1) {
-    setPage((prevPage) => prevPage - 1);
-  }
-};
-
 export default function ProducList() {
   const [page, setPage] = useState(1);
   const { data } = useProducts({ variables: { page: 1, items: 100 } });
@@ -173,11 +62,8 @@ export default function ProducList() {
   const [shouldReset, setShouldReset] = useState(false);
 
   useEffect(() => {
-    if (data && query === '') {
-      setProducts(data.data.slice((page - 1) * 7, page * 7));
-    } else {
-      setProducts(filteredProducts.slice((page - 1) * 7, page * 7));
-    }
+    const productList = query === '' ? data?.data ?? [] : filteredProducts;
+    setProducts(productList?.slice((page - 1) * 7, page * 7));
   }, [data, page, query, filteredProducts]);
 
   if (data === undefined) {
@@ -210,25 +96,15 @@ export default function ProducList() {
           cleanQuery={shouldReset}
         />
         <SearchResult query={query} clearQuery={resetSearchBar} />
-        <View>
-          <ScrollView
-            contentContainerStyle={{
-              paddingBottom: query === '' ? 200 : 280,
-            }}
-          >
-            <ProductsList products={products} />
-            <PageController
-              handleNextPage={handleNextPage}
-              handlePrevPage={handlePrevPage}
-              data={data}
-              query={query}
-              page={page}
-              filteredProducts={filteredProducts}
-              setPage={setPage}
-              setProducts={setProducts}
-            />
-          </ScrollView>
-        </View>
+        <ProductListScrollView
+          data={data}
+          page={page}
+          query={query}
+          filteredProducts={filteredProducts}
+          setPage={setPage}
+          setProducts={setProducts}
+          products={products}
+        />
         <FiltersButton products={products} query={query} />
       </SafeAreaView>
     </>
