@@ -1,60 +1,21 @@
-import type { FetchProductsResponse, Product } from '@/api/products/types';
-import { ScrollView, Text, TouchableOpacity, View } from '@/ui';
+import { memo, useCallback, useEffect } from 'react';
+
+import type { Product } from '@/api/products/types';
+import { useProducts } from '@/api/products/use-products';
+import { ScrollView, Text, View } from '@/ui';
 
 import { ProductCard } from './product-card';
 
 type HandlePageProps = {
-  data: FetchProductsResponse;
-  page: number;
   query: string;
-  filteredProducts: Product[];
+  page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+  fetchedProducts: Product[];
+  setFetchedProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 };
 
-const handleNextPage = ({
-  data,
-  page,
-  query,
-  filteredProducts,
-  setPage,
-}: HandlePageProps) => {
-  const hasMoreProducts =
-    query === ''
-      ? data.data.length > page * 7
-      : filteredProducts.length > page * 7;
-
-  if (hasMoreProducts) {
-    setPage((prevPage) => prevPage + 1);
-  }
-};
-
-const handlePrevPage = ({ page, setPage }: HandlePageProps) => {
-  if (page > 1) {
-    setPage((prevPage) => prevPage - 1);
-  }
-};
-
-const PageController = (handlePageProps: HandlePageProps) => {
-  return (
-    <View className="flex-row justify-between px-5 pb-2">
-      <TouchableOpacity
-        onPress={() => handlePrevPage(handlePageProps)}
-        className={`rounded-3xl bg-dark_violet p-4 px-6`}
-      >
-        <Text className="text-lg text-white">Previous</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => handleNextPage(handlePageProps)}
-        className={`rounded-3xl bg-dark_violet p-4 px-6`}
-      >
-        <Text className="text-lg text-white">Next</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-const ProductsList = ({ products }: { products: Product[] }) => {
+const ProductsList = memo(({ products }: { products: Product[] }) => {
   if (products.length === 0) {
     return (
       <View className="m-4 gap-4 self-center text-4xl font-semibold">
@@ -83,33 +44,58 @@ const ProductsList = ({ products }: { products: Product[] }) => {
       ))}
     </View>
   );
-};
+});
 
 export const ProductListScrollView = ({
-  data,
   page,
-  query,
-  filteredProducts,
   setPage,
-  setProducts,
   products,
+  query,
+  setProducts,
+  fetchedProducts,
+  setFetchedProducts,
 }: HandlePageProps & { products: Product[] }) => {
+  const { data } = useProducts({ variables: { page: page, items: 7 } });
+
+  useEffect(() => {
+    if (data && data.data) {
+      setFetchedProducts((prevProducts) => [...prevProducts, ...data.data]);
+    }
+  }, [data, setFetchedProducts]);
+
+  useEffect(() => {
+    setProducts(fetchedProducts);
+  }, [fetchedProducts, setProducts]);
+
+  const handleEndReached = useCallback(() => {
+    const totalItems = data?.pagination?.count ?? 0;
+    if (page * 7 - 1 < totalItems) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  }, [page, setPage, data?.pagination.count]);
+
+  if (data === undefined) {
+    return null;
+  }
+
   return (
     <View>
       <ScrollView
         contentContainerStyle={{
           paddingBottom: query === '' ? 200 : 280,
         }}
+        onScroll={({ nativeEvent }) => {
+          const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
+          const isCloseToBottom =
+            layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - 20;
+          if (isCloseToBottom) {
+            handleEndReached();
+          }
+        }}
+        scrollEventThrottle={400}
       >
         <ProductsList products={products} />
-        <PageController
-          data={data}
-          page={page}
-          query={query}
-          filteredProducts={filteredProducts}
-          setPage={setPage}
-          setProducts={setProducts}
-        />
       </ScrollView>
     </View>
   );

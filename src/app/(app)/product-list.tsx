@@ -1,8 +1,7 @@
 import images from 'assets';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import type { Product } from '@/api/products/types';
-import { useProducts } from '@/api/products/use-products';
 import { HeaderLogo } from '@/components/header-logo';
 import { ProductListScrollView } from '@/components/products-list/products-scroll-view';
 import { SearchBar } from '@/components/search-bar';
@@ -31,7 +30,6 @@ const FiltersButton = ({
     </View>
   );
 };
-
 const SearchResult = ({
   query,
   clearQuery,
@@ -55,35 +53,29 @@ const SearchResult = ({
 
 export default function ProducList() {
   const [page, setPage] = useState(1);
-  const { data } = useProducts({ variables: { page: 1, items: 100 } });
   const [products, setProducts] = useState<Product[]>([]);
+  const [fetchedProducts, setFetchedProducts] = useState<Product[]>([]);
   const [query, setQuery] = useState<string>('');
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [shouldReset, setShouldReset] = useState(false);
 
-  useEffect(() => {
-    const productList = query === '' ? data?.data ?? [] : filteredProducts;
-    setProducts(productList?.slice((page - 1) * 7, page * 7));
-  }, [data, page, query, filteredProducts]);
-
-  if (data === undefined) {
-    return null;
-  }
-
   const resetSearchBar = () => {
-    setProducts(data.data.slice(0, 7));
+    setProducts(fetchedProducts);
     setShouldReset(true);
     setQuery('');
     setTimeout(() => setShouldReset(false), 100);
   };
 
   const handleProductSelect = (searchQuery: string) => {
-    const queryProducts = data.data.filter((product) =>
+    if (searchQuery === '') {
+      resetSearchBar();
+      return;
+    }
+    const queryProducts = fetchedProducts.filter((product) =>
       product.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredProducts(queryProducts);
     setQuery(searchQuery);
-    setPage(1);
     setProducts(filteredProducts.slice(0, 7));
   };
 
@@ -97,12 +89,12 @@ export default function ProducList() {
         />
         <SearchResult query={query} clearQuery={resetSearchBar} />
         <ProductListScrollView
-          data={data}
+          setProducts={setProducts}
+          fetchedProducts={fetchedProducts}
+          setFetchedProducts={setFetchedProducts}
+          setPage={setPage}
           page={page}
           query={query}
-          filteredProducts={filteredProducts}
-          setPage={setPage}
-          setProducts={setProducts}
           products={products}
         />
         <FiltersButton products={products} query={query} />
