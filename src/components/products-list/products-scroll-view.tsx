@@ -1,8 +1,9 @@
 import { memo, useCallback, useEffect } from 'react';
+import { FlatList } from 'react-native';
 
 import type { Product } from '@/api/products/types';
 import { useProducts } from '@/api/products/use-products';
-import { ScrollView, Text, View } from '@/ui';
+import { Text, View } from '@/ui';
 
 import { ProductCard } from './product-card';
 
@@ -15,42 +16,59 @@ type HandlePageProps = {
   setFetchedProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 };
 
-const ProductsList = memo(({ products }: { products: Product[] }) => {
-  if (products.length === 0) {
+type ProductsListProps = {
+  products: Product[];
+  onEndReached: () => void;
+  onScroll: (event: any) => void;
+};
+
+const ProductsList = memo(
+  ({ products, onEndReached, onScroll }: ProductsListProps) => {
+    if (products.length === 0) {
+      return (
+        <View className="m-4 gap-4 self-center text-4xl font-semibold">
+          <Text>No products found</Text>
+        </View>
+      );
+    }
+
     return (
-      <View className="m-4 gap-4 self-center text-4xl font-semibold">
-        <Text>No products found</Text>
+      <View className="mt-4">
+        <FlatList
+          onEndReached={onEndReached}
+          data={products}
+          onScroll={onScroll}
+          renderItem={({ item, index }) => {
+            const isFirstItem = index === 0;
+            const isLastItem = index === products.length - 1;
+
+            return (
+              <View
+                className={`mx-4 border ${isFirstItem ? 'rounded-t-lg' : ''} ${
+                  isLastItem ? 'rounded-b-lg' : ''
+                }`}
+              >
+                <ProductCard
+                  id={item.id}
+                  price={item.unit_price}
+                  state={item.state}
+                  name={item.title}
+                  image_url={item.pictures[0]}
+                />
+              </View>
+            );
+          }}
+          keyExtractor={(item) => item.id.toString()}
+        />
       </View>
     );
   }
-
-  return (
-    <View className="m-4 gap-4 rounded-lg border">
-      {products.map((product, index) => (
-        <View key={index}>
-          <View>
-            <ProductCard
-              id={product.id}
-              price={product.unit_price}
-              state={product.state}
-              name={product.title}
-              image_url={product.pictures[0]}
-            />
-          </View>
-          {index < products.length - 1 && (
-            <View className="h-px w-full bg-black" />
-          )}
-        </View>
-      ))}
-    </View>
-  );
-});
+);
 
 export const ProductListScrollView = ({
   page,
   setPage,
   products,
-  query,
   setProducts,
   fetchedProducts,
   setFetchedProducts,
@@ -74,29 +92,29 @@ export const ProductListScrollView = ({
     }
   }, [page, setPage, data?.pagination.count]);
 
+  const handleScroll = useCallback(
+    ({ nativeEvent }: any) => {
+      const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
+      const isCloseToBottom =
+        layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+      if (isCloseToBottom) {
+        handleEndReached();
+      }
+    },
+    [handleEndReached]
+  );
+
   if (data === undefined) {
     return null;
   }
 
   return (
-    <View>
-      <ScrollView
-        contentContainerStyle={{
-          paddingBottom: query === '' ? 200 : 280,
-        }}
-        onScroll={({ nativeEvent }) => {
-          const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
-          const isCloseToBottom =
-            layoutMeasurement.height + contentOffset.y >=
-            contentSize.height - 20;
-          if (isCloseToBottom) {
-            handleEndReached();
-          }
-        }}
-        scrollEventThrottle={400}
-      >
-        <ProductsList products={products} />
-      </ScrollView>
+    <View className="mb-52">
+      <ProductsList
+        products={products}
+        onEndReached={handleEndReached}
+        onScroll={handleScroll}
+      />
     </View>
   );
 };

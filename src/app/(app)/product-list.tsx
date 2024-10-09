@@ -56,7 +56,6 @@ export default function ProducList() {
   const [products, setProducts] = useState<Product[]>([]);
   const [fetchedProducts, setFetchedProducts] = useState<Product[]>([]);
   const [query, setQuery] = useState<string>('');
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [shouldReset, setShouldReset] = useState(false);
 
   const resetSearchBar = () => {
@@ -74,9 +73,8 @@ export default function ProducList() {
     const queryProducts = fetchedProducts.filter((product) =>
       product.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    setFilteredProducts(queryProducts);
     setQuery(searchQuery);
-    setProducts(filteredProducts.slice(0, 7));
+    setProducts(queryProducts.slice(0, 7));
   };
 
   return (
