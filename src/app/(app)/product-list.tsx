@@ -1,11 +1,19 @@
 import images from 'assets';
-import { useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
+import { FlatList } from 'react-native';
 
-import type { Product } from '@/api/products/types';
+import type { FetchProductsResponse, Product } from '@/api/products/types';
+import { useProducts } from '@/api/products/use-products';
 import { HeaderLogo } from '@/components/header-logo';
-import { ProductListScrollView } from '@/components/products-list/products-scroll-view';
+import { ProductCard } from '@/components/products-list/product-card';
 import { SearchBar } from '@/components/search-bar';
 import { Image, SafeAreaView, Text, TouchableOpacity, View } from '@/ui';
+
+type ProductsListProps = {
+  products: Product[];
+  onEndReached: () => void;
+  onScroll: (event: any) => void;
+};
 
 const FiltersButton = ({
   products,
@@ -30,6 +38,7 @@ const FiltersButton = ({
     </View>
   );
 };
+
 const SearchResult = ({
   query,
   clearQuery,
@@ -51,12 +60,88 @@ const SearchResult = ({
   }
 };
 
+const ProductsList = memo(
+  ({ products, onEndReached, onScroll }: ProductsListProps) => {
+    if (products.length === 0) {
+      return (
+        <View className="m-4 gap-4 self-center text-4xl font-semibold">
+          <Text>No products found</Text>
+        </View>
+      );
+    }
+
+    return (
+      <View className="mt-4">
+        <FlatList
+          onEndReached={onEndReached}
+          data={products}
+          onScroll={onScroll}
+          renderItem={({ item, index }) => {
+            const isFirstItem = index === 0;
+            const isLastItem = index === products.length - 1;
+
+            return (
+              <View
+                className={`mx-4 border ${isFirstItem ? 'rounded-t-lg' : ''} ${
+                  isLastItem ? 'rounded-b-lg' : ''
+                }`}
+              >
+                <ProductCard
+                  id={item.id}
+                  price={item.unit_price}
+                  state={item.state}
+                  name={item.title}
+                  image_url={item.pictures[0]}
+                />
+              </View>
+            );
+          }}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      </View>
+    );
+  }
+);
+
+const useProductPagination = (
+  page: number,
+  data: FetchProductsResponse | undefined,
+  setPage: React.Dispatch<React.SetStateAction<number>>
+) => {
+  const handleEndReached = useCallback(() => {
+    if (page * 7 - 1 < (data?.pagination?.count ?? 0)) {
+      setPage((prev) => prev + 1);
+    }
+  }, [page, data, setPage]);
+
+  const handleScroll = useCallback(
+    ({ nativeEvent }: any) => {
+      const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
+      if (
+        layoutMeasurement.height + contentOffset.y >=
+        contentSize.height - 20
+      ) {
+        handleEndReached();
+      }
+    },
+    [handleEndReached]
+  );
+
+  return { handleEndReached, handleScroll };
+};
+
 export default function ProducList() {
   const [page, setPage] = useState(1);
   const [products, setProducts] = useState<Product[]>([]);
+  const { data } = useProducts({ variables: { page: page, items: 7 } });
   const [fetchedProducts, setFetchedProducts] = useState<Product[]>([]);
   const [query, setQuery] = useState<string>('');
   const [shouldReset, setShouldReset] = useState(false);
+  const { handleEndReached, handleScroll } = useProductPagination(
+    page,
+    data,
+    setPage
+  );
 
   const resetSearchBar = () => {
     setProducts(fetchedProducts);
@@ -77,26 +162,30 @@ export default function ProducList() {
     setProducts(queryProducts.slice(0, 7));
   };
 
+  useEffect(() => {
+    if (data?.data) {
+      setFetchedProducts((prev) => [...prev, ...data.data]);
+    }
+  }, [data]);
+
+  useEffect(() => setProducts(fetchedProducts), [fetchedProducts]);
+
   return (
-    <>
-      <SafeAreaView className="flex-1">
-        <HeaderLogo />
-        <SearchBar
-          onProductSelect={handleProductSelect}
-          cleanQuery={shouldReset}
-        />
-        <SearchResult query={query} clearQuery={resetSearchBar} />
-        <ProductListScrollView
-          setProducts={setProducts}
-          fetchedProducts={fetchedProducts}
-          setFetchedProducts={setFetchedProducts}
-          setPage={setPage}
-          page={page}
-          query={query}
+    <SafeAreaView className="flex-1">
+      <HeaderLogo />
+      <SearchBar
+        onProductSelect={handleProductSelect}
+        cleanQuery={shouldReset}
+      />
+      <SearchResult query={query} clearQuery={resetSearchBar} />
+      <View className="mb-52">
+        <ProductsList
           products={products}
+          onEndReached={handleEndReached}
+          onScroll={handleScroll}
         />
-        <FiltersButton products={products} query={query} />
-      </SafeAreaView>
-    </>
+      </View>
+      <FiltersButton products={products} query={query} />
+    </SafeAreaView>
   );
 }
