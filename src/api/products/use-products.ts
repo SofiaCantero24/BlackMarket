@@ -12,9 +12,8 @@ export const useProducts = createQuery<
   AxiosError
 >({
   queryKey: ['products'],
-  fetcher: ({ page, items }) => {
-    return client
-      .get(`products?page=${page}&items=${items}`)
-      .then((response) => response.data);
+  fetcher: async ({ page, items }) => {
+    const { data } = await client.get(`products?page=${page}&items=${items}`);
+    return data;
   },
 });
