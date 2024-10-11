@@ -4,16 +4,12 @@ import { useEffect, useState } from 'react';
 import { Image, Input, View } from '@/ui';
 
 type SearchBarProps = {
-  onProductSelect: (query: string) => void;
+  setQuery: React.Dispatch<React.SetStateAction<string>>;
   cleanQuery: boolean;
 };
 
-export const SearchBar = ({ onProductSelect, cleanQuery }: SearchBarProps) => {
+export const SearchBar = ({ setQuery, cleanQuery }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState('');
-
-  const handleSearch = () => {
-    onProductSelect(searchTerm);
-  };
 
   useEffect(() => {
     if (cleanQuery) {
@@ -32,8 +28,7 @@ export const SearchBar = ({ onProductSelect, cleanQuery }: SearchBarProps) => {
             value={searchTerm}
             onChangeText={setSearchTerm}
             onSubmitEditing={() => {
-              setSearchTerm(searchTerm);
-              handleSearch();
+              setQuery(searchTerm);
             }}
           />
         </View>

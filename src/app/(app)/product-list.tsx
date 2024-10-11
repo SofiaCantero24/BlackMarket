@@ -4,6 +4,7 @@ import { FlatList } from 'react-native';
 
 import type { FetchProductsResponse, Product } from '@/api/products/types';
 import { useProducts } from '@/api/products/use-products';
+import { useSearchProduct } from '@/api/products/use-search-product';
 import { HeaderLogo } from '@/components/header-logo';
 import { ProductCard } from '@/components/products-list/product-card';
 import { SearchBar } from '@/components/search-bar';
@@ -13,6 +14,13 @@ type ProductsListProps = {
   products: Product[];
   onEndReached: () => void;
   onScroll: (event: any) => void;
+};
+
+type PaginationProps = {
+  page: number;
+  data: FetchProductsResponse | undefined;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  query: string;
 };
 
 const FiltersButton = ({
@@ -103,16 +111,17 @@ const ProductsList = memo(
   }
 );
 
-const useProductPagination = (
-  page: number,
-  data: FetchProductsResponse | undefined,
-  setPage: React.Dispatch<React.SetStateAction<number>>
-) => {
+const useProductPagination = ({
+  data,
+  page,
+  query,
+  setPage,
+}: PaginationProps) => {
   const handleEndReached = useCallback(() => {
-    if (page * 7 - 1 < (data?.pagination?.count ?? 0)) {
+    if (page * 7 - 1 < (data?.pagination?.count ?? 0) && query === '') {
       setPage((prev) => prev + 1);
     }
-  }, [page, data, setPage]);
+  }, [page, data, setPage, query]);
 
   const handleScroll = useCallback(
     ({ nativeEvent }: any) => {
@@ -132,34 +141,27 @@ const useProductPagination = (
 
 export default function ProducList() {
   const [page, setPage] = useState(1);
-  const [products, setProducts] = useState<Product[]>([]);
   const { data } = useProducts({ variables: { page: page, items: 7 } });
+  const [products, setProducts] = useState<Product[]>([]);
   const [fetchedProducts, setFetchedProducts] = useState<Product[]>([]);
   const [query, setQuery] = useState<string>('');
   const [shouldReset, setShouldReset] = useState(false);
-  const { handleEndReached, handleScroll } = useProductPagination(
+  const { handleEndReached, handleScroll } = useProductPagination({
     page,
     data,
-    setPage
-  );
+    setPage,
+    query,
+  });
+
+  const { data: searchedProducts } = useSearchProduct({
+    variables: { product: query },
+  });
 
   const resetSearchBar = () => {
     setProducts(fetchedProducts);
     setShouldReset(true);
     setQuery('');
     setTimeout(() => setShouldReset(false), 100);
-  };
-
-  const handleProductSelect = (searchQuery: string) => {
-    if (searchQuery === '') {
-      resetSearchBar();
-      return;
-    }
-    const queryProducts = fetchedProducts.filter((product) =>
-      product.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setQuery(searchQuery);
-    setProducts(queryProducts.slice(0, 7));
   };
 
   useEffect(() => {
@@ -170,15 +172,18 @@ export default function ProducList() {
 
   useEffect(() => setProducts(fetchedProducts), [fetchedProducts]);
 
+  useEffect(() => {
+    if (searchedProducts?.data) {
+      setProducts(searchedProducts.data);
+    }
+  }, [searchedProducts]);
+
   return (
     <SafeAreaView className="flex-1">
       <HeaderLogo />
-      <SearchBar
-        onProductSelect={handleProductSelect}
-        cleanQuery={shouldReset}
-      />
+      <SearchBar setQuery={setQuery} cleanQuery={shouldReset} />
       <SearchResult query={query} clearQuery={resetSearchBar} />
-      <View className="mb-52">
+      <View className={`${query === '' ? 'mb-52' : 'mb-80'}`}>
         <ProductsList
           products={products}
           onEndReached={handleEndReached}
