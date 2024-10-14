@@ -11,7 +11,7 @@ type Variables = {
 };
 
 export const useProducts = createQuery<Response, Variables, AxiosError>({
-  queryKey: ['products', (variables: { page: number }) => variables.page],
+  queryKey: ['products'],
   fetcher: async ({ page, items }) => {
     const { data } = await client.get(`products?page=${page}&items=${items}`);
     return data;
