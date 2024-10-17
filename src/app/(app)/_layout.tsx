@@ -8,7 +8,6 @@ import {
   Favorite as FavoriteIcon,
   Home as HomeIcon,
   Menu as MenuIcon,
-  Sell as SellIcon,
 } from '@/ui/icons';
 
 const renderIcon = (
@@ -29,13 +28,13 @@ const tabs = [
     testID: 'feed-tab',
     headerShown: false,
   },
-  {
-    name: 'product-list',
-    title: 'product-list',
-    icon: SellIcon,
-    testID: 'product-list-tab',
-    headerShown: false,
-  },
+  // {
+  //   name: 'product-list',
+  //   title: 'product-list',
+  //   icon: SellIcon,
+  //   testID: 'product-list-tab',
+  //   headerShown: false,
+  // },
   {
     name: 'settings',
     title: 'Settings',
