@@ -80,4 +80,5 @@ module.exports = {
   dark_violet: '#00031A',
   light_gray: '#E0E0E0',
   restored: '#559F21',
+  new: '#2751B9',
 };
