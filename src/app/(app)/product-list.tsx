@@ -99,7 +99,7 @@ const ProductsList = memo(({ products, onEndReached }: ProductsListProps) => {
   );
 });
 
-export default function ProducList() {
+export default function ProductList() {
   const [query, setQuery] = useState<string>('');
   const {
     data: products,
