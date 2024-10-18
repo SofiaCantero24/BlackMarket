@@ -1,12 +1,12 @@
 import { HeaderLogo } from '@/components/header-logo';
-import { SearchBar } from '@/components/search-bar';
+import { HorizontalCarousel } from '@/components/home/carousel';
 import { SafeAreaView } from '@/ui';
 
 export default function Feed() {
   return (
     <SafeAreaView>
       <HeaderLogo />
-      <SearchBar setQuery={() => {}} query={''} />
+      <HorizontalCarousel />
     </SafeAreaView>
   );
 }
