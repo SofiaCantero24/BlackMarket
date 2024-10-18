@@ -4,7 +4,9 @@ const TOKEN = 'token';
 
 export type TokenType = {
   access: string;
-  refresh: string;
+  client: string;
+  uid: string;
+  expiry: string;
 };
 
 export const getToken = () => getItem<TokenType>(TOKEN);
