@@ -4,7 +4,6 @@ import { FlatList } from 'react-native';
 
 import type { Product } from '@/api/products/types';
 import { useProducts } from '@/api/products/use-products';
-import { useSearchProduct } from '@/api/products/use-search-product';
 import { HeaderLogo } from '@/components/header-logo';
 import { ProductCard } from '@/components/products-list/product-card';
 import { SearchBar } from '@/components/search-bar';
@@ -101,22 +100,18 @@ const ProductsList = memo(({ products, onEndReached }: ProductsListProps) => {
 });
 
 export default function ProducList() {
+  const [query, setQuery] = useState<string>('');
   const {
     data: products,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
   } = useProducts({
-    variables: { items: 7 },
-  });
-  const [query, setQuery] = useState<string>('');
-
-  const { data: searchedProducts } = useSearchProduct({
-    variables: { product: query },
+    variables: { items: 7, text: query },
   });
 
   const handleLoadMore = () => {
-    if (hasNextPage && !isFetchingNextPage && query === '') {
+    if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   };
@@ -125,10 +120,7 @@ export default function ProducList() {
     setQuery('');
   };
 
-  const productsToDisplay =
-    query !== ''
-      ? searchedProducts?.data || []
-      : products?.pages.flatMap((page) => page.data) || [];
+  const productsToDisplay = products?.pages.flatMap((page) => page.data) || [];
 
   return (
     <SafeAreaView className="flex-1">

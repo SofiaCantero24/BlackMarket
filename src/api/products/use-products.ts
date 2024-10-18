@@ -5,6 +5,7 @@ import type { FetchProductsResponse } from './types';
 
 type Variables = {
   items: number;
+  text: string;
 };
 
 export const useProducts = createInfiniteQuery({
@@ -14,7 +15,7 @@ export const useProducts = createInfiniteQuery({
     { pageParam = 1 }
   ): Promise<FetchProductsResponse> => {
     const { data } = await client.get<FetchProductsResponse>(
-      `/products?page=${pageParam}&items=${variables.items}`
+      `/products?page=${pageParam}&items=${variables.items}&text=${variables.text}`
     );
     return data;
   },
