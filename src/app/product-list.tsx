@@ -20,9 +20,7 @@ const FiltersButton = ({ products }: { products: Product[] }) => {
     return;
   }
   return (
-    <View
-      className={`absolute -bottom-8 flex w-auto items-center justify-center self-center pb-20`}
-    >
+    <View className="absolute -bottom-8 flex w-auto items-center justify-center self-center pb-20">
       <TouchableOpacity className="flex-row items-center gap-4 rounded-full bg-dark_violet p-4 px-8">
         <Text className="text-lg font-bold text-white">Filers</Text>
         <Image className="h-4 w-4" source={images.filterIcon()} />

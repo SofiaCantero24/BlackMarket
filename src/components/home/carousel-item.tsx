@@ -1,3 +1,5 @@
+import { twMerge } from 'tailwind-merge';
+
 import type { Product } from '@/api/products/types';
 import { Image, Text, View } from '@/ui';
 import { Favorite } from '@/ui/icons';
@@ -30,12 +32,13 @@ export const CarouselItem = ({ item }: { item: Product }) => {
           />
         </View>
         <View className="h-px bg-black shadow-lg shadow-gray-400 " />
-        <View className="border-t-1 flex-row items-center justify-between border-t border-black px-4 pt-2 opacity-100">
+        <View className="flex-row items-center justify-between px-4 pt-2 opacity-100">
           <Text className="text-lg font-semibold">{item.unit_price}</Text>
           <View
-            className={`${
-              item.state === 'totaly_new' ? 'bg-new' : 'bg-restored'
-            } flex items-center justify-center rounded-md p-0.5 px-2`}
+            className={twMerge(
+              item.state === 'totaly_new' ? 'bg-new' : 'bg-restored',
+              'flex items-center justify-center rounded-md p-0.5 px-2'
+            )}
           >
             <Text className="text-white">
               {`${item.state === 'totaly_new' ? 'New' : 'Restored'}`}
@@ -43,7 +46,7 @@ export const CarouselItem = ({ item }: { item: Product }) => {
           </View>
         </View>
         <View className="h-18 w-full flex-row items-center justify-between pl-4 pr-2 pt-2">
-          <Text numberOfLines={2} className="w-9/12 font-semibold">
+          <Text numberOfLines={2} className="w-3/5 font-semibold">
             {item.title}
           </Text>
           <Icon focused={false} />
