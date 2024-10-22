@@ -1,4 +1,5 @@
 import images from 'assets';
+import { useRouter } from 'expo-router';
 import { memo, useState } from 'react';
 import { FlatList } from 'react-native';
 
@@ -14,22 +15,12 @@ type ProductsListProps = {
   onEndReached: () => void;
 };
 
-const FiltersButton = ({
-  products,
-  query,
-}: {
-  products: Product[];
-  query: string;
-}) => {
+const FiltersButton = ({ products }: { products: Product[] }) => {
   if (products.length === 0) {
     return;
   }
   return (
-    <View
-      className={`absolute ${
-        query === '' ? 'bottom-20' : 'bottom-28'
-      } flex w-auto items-center justify-center self-center pb-20`}
-    >
+    <View className="absolute -bottom-8 flex w-auto items-center justify-center self-center pb-20">
       <TouchableOpacity className="flex-row items-center gap-4 rounded-full bg-dark_violet p-4 px-8">
         <Text className="text-lg font-bold text-white">Filers</Text>
         <Image className="h-4 w-4" source={images.filterIcon()} />
@@ -47,7 +38,7 @@ const SearchResult = ({
 }) => {
   if (query) {
     return (
-      <View className="flex-row justify-between px-5 pt-6">
+      <View className="flex-row justify-between px-5 pt-3">
         <Text className="text-lg text-gray-600">
           You searched for "{query}”
         </Text>
@@ -69,7 +60,7 @@ const ProductsList = memo(({ products, onEndReached }: ProductsListProps) => {
   }
 
   return (
-    <View className="mt-4">
+    <View className="pt-2">
       <FlatList
         onEndReached={onEndReached}
         data={products}
@@ -100,6 +91,7 @@ const ProductsList = memo(({ products, onEndReached }: ProductsListProps) => {
 });
 
 export default function ProductList() {
+  const { back } = useRouter();
   const [query, setQuery] = useState<string>('');
   const {
     data: products,
@@ -125,15 +117,21 @@ export default function ProductList() {
   return (
     <SafeAreaView className="flex-1">
       <HeaderLogo />
+      <TouchableOpacity
+        onPress={back}
+        className="absolute left-2 top-[67] flex-row items-center rounded-full bg-green-600 p-2 px-4"
+      >
+        <Text className="text-md font-bold text-white">Back</Text>
+      </TouchableOpacity>
       <SearchBar setQuery={setQuery} query={query} />
       <SearchResult query={query} clearQuery={clearQuery} />
-      <View className={`${query === '' ? 'mb-52' : 'mb-80'}`}>
+      <View className={`${query === '' ? 'pb-56' : 'pb-80'}`}>
         <ProductsList
           products={productsToDisplay}
           onEndReached={handleLoadMore}
         />
       </View>
-      <FiltersButton products={productsToDisplay} query={query} />
+      <FiltersButton products={productsToDisplay} />
     </SafeAreaView>
   );
 }
