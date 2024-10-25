@@ -35,8 +35,9 @@ export const ProductCard = memo(
                 pathname: '/details/[id]',
                 params: { id: id },
               }}
+              className='className="h-full w-3/4'
             >
-              <Text className="h-full w-3/4 text-xl font-bold">{name}</Text>
+              <Text className="text-xl font-bold">{name}</Text>
             </Link>
             <TouchableOpacity
               className="h-12 w-12 rounded-full border border-black p-2"
