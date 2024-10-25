@@ -24,7 +24,7 @@ export const CarouselItem = ({ item }: { item: Product }) => {
   return (
     <Link
       href={{
-        pathname: '/detail/[id]',
+        pathname: '/details/[id]',
         params: { id: item.id },
       }}
     >
