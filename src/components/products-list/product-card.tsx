@@ -1,3 +1,4 @@
+import { Link } from 'expo-router';
 import { memo } from 'react';
 
 import { Button, Image, Text, TouchableOpacity, View } from '@/ui';
@@ -12,17 +13,31 @@ export interface ProductCardProps {
 }
 
 export const ProductCard = memo(
-  ({ name, price, state, image_url }: ProductCardProps) => {
+  ({ name, price, state, image_url, id }: ProductCardProps) => {
     return (
       <View className="w-full flex-row items-center justify-between space-x-4 rounded-lg bg-white p-3">
-        <Image
-          source={{ uri: image_url }}
-          className="flex h-32 w-32"
-          contentFit="contain"
-        />
+        <Link
+          href={{
+            pathname: '/details/[id]',
+            params: { id: id },
+          }}
+        >
+          <Image
+            source={{ uri: image_url }}
+            className="flex h-32 w-32"
+            contentFit="contain"
+          />
+        </Link>
         <View className="w-full flex-1 px-4">
           <View className="flex-row items-center justify-between">
-            <Text className="h-full w-3/4 text-xl font-bold">{name}</Text>
+            <Link
+              href={{
+                pathname: '/details/[id]',
+                params: { id: id },
+              }}
+            >
+              <Text className="h-full w-3/4 text-xl font-bold">{name}</Text>
+            </Link>
             <TouchableOpacity
               className="h-12 w-12 rounded-full border border-black p-2"
               activeOpacity={0.7}
