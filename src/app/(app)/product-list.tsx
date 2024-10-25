@@ -93,7 +93,7 @@ const ProductsList = memo(({ products, onEndReached }: ProductsListProps) => {
 });
 
 export default function ProductList() {
-  const router = useRouter();
+  const { back } = useRouter();
   const [query, setQuery] = useState<string>('');
   const {
     data: products,
@@ -120,7 +120,7 @@ export default function ProductList() {
     <SafeAreaView className="flex-1">
       <HeaderLogo />
       <TouchableOpacity
-        onPress={() => router.back()}
+        onPress={back}
         className="absolute left-2 top-[67] flex-row items-center rounded-full bg-green-600 p-2 px-4"
       >
         <Text className="text-md font-bold text-white">Back</Text>

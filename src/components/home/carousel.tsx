@@ -24,11 +24,7 @@ export const HorizontalCarousel = () => {
       <FlatList
         className="h-[280]"
         data={productsToDisplay}
-        contentContainerStyle={{
-          alignItems: 'center',
-          gap: 16,
-          paddingHorizontal: 16,
-        }}
+        contentContainerClassName="gap-4 px-4 items-center"
         horizontal
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => <CarouselItem item={item} />}
