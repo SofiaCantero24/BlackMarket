@@ -21,7 +21,7 @@ const FiltersButton = ({ products }: { products: Product[] }) => {
   }
   return (
     <View
-      className={`absolute -bottom-8 flex w-auto items-center justify-center self-center pb-20`}
+      className={`absolute bottom-24 flex w-auto items-center justify-center self-center pb-20`}
     >
       <TouchableOpacity className="flex-row items-center gap-4 rounded-full bg-dark_violet p-4 px-8">
         <Text className="text-lg font-bold text-white">Filers</Text>
@@ -127,7 +127,7 @@ export default function ProductList() {
       </TouchableOpacity>
       <SearchBar setQuery={setQuery} query={query} />
       <SearchResult query={query} clearQuery={clearQuery} />
-      <View className={`${query === '' ? 'pb-56' : 'pb-80'}`}>
+      <View className={`${query === '' ? 'pb-52' : 'pb-72'}`}>
         <ProductsList
           products={productsToDisplay}
           onEndReached={handleLoadMore}

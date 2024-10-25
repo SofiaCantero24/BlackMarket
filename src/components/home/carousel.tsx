@@ -37,7 +37,7 @@ export const HorizontalCarousel = () => {
       <TouchableOpacity
         className="items-center"
         onPress={() => {
-          router.push('/product-list');
+          router.push('/(app)/product-list');
         }}
       >
         <Text className="font-semibold text-link">See all</Text>
