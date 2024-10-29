@@ -4,6 +4,7 @@ import { FlatList } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { twMerge } from 'tailwind-merge';
 
+import { useAddShoppingCartItems } from '@/api/cart/use-add-line-item';
 import { useGetItemDetails } from '@/api/products/use-details';
 import { HeaderLogo } from '@/components/header-logo';
 import {
@@ -24,6 +25,7 @@ type DropdownItem = {
 type AddToCartSectionProps = {
   setQuantity: React.Dispatch<React.SetStateAction<number>>;
   quantity: number;
+  buy: () => void;
 };
 
 const ImageDisplayer = ({ images }: { images: string[] | undefined }) => {
@@ -65,7 +67,11 @@ const ImageDisplayer = ({ images }: { images: string[] | undefined }) => {
   );
 };
 
-const AddToCartSection = ({ quantity, setQuantity }: AddToCartSectionProps) => {
+const AddToCartSection = ({
+  quantity,
+  setQuantity,
+  buy,
+}: AddToCartSectionProps) => {
   const numberItems: DropdownItem[] = Array.from(
     { length: quantity },
     (_, index) => ({
@@ -73,7 +79,7 @@ const AddToCartSection = ({ quantity, setQuantity }: AddToCartSectionProps) => {
       value: index + 1,
     })
   );
-  const [selectedValue, setSelectedValue] = useState<string | null>('1');
+  const [selectedValue, setSelectedValue] = useState<string>('1');
 
   return (
     <View className="mb-4 flex-row items-center justify-between">
@@ -106,7 +112,7 @@ const AddToCartSection = ({ quantity, setQuantity }: AddToCartSectionProps) => {
           className="mt-3 h-12 w-72"
           label="Add to cart"
           textClassName="font-bold text-base"
-          onPress={() => {}}
+          onPress={buy}
         />
       </View>
     </View>
@@ -118,6 +124,15 @@ export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
   const { data } = useGetItemDetails(Number(id));
   const [quantity, setQuantity] = useState<number>(1);
+
+  const mutate = useAddShoppingCartItems({});
+
+  const buy = async () => {
+    try {
+      await mutate.mutateAsync({ itemId: Number(id), quantity });
+    } catch (error) {}
+    router.back();
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
@@ -144,7 +159,11 @@ export default function DetailsScreen() {
           <Text className="text-2xl font-light">{data?.category.name}</Text>
           <Text className="font-semi-bold font-">{data?.unit_price}</Text>
           <ImageDisplayer images={data?.pictures} />
-          <AddToCartSection quantity={quantity} setQuantity={setQuantity} />
+          <AddToCartSection
+            quantity={quantity}
+            setQuantity={setQuantity}
+            buy={buy}
+          />
           <View className="mb-4">
             <Text className="mb-3 mr-2 font-bold">Product description</Text>
             <Text>{data?.description}</Text>
