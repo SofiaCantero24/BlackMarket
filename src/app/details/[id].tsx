@@ -1,5 +1,6 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
+import { showMessage } from 'react-native-flash-message';
 import { twMerge } from 'tailwind-merge';
 
 import { useAddShoppingCartItems } from '@/api/cart/use-add-line-item';
@@ -20,6 +21,10 @@ export default function DetailsScreen() {
   const buy = async () => {
     try {
       await mutate.mutateAsync({ itemId: Number(id), quantity });
+      showMessage({
+        message: 'Producto agregado al carrito',
+        type: 'success',
+      });
     } catch (error) {}
     router.back();
   };
