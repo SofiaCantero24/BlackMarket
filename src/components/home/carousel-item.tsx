@@ -1,3 +1,4 @@
+import { Link } from 'expo-router';
 import { twMerge } from 'tailwind-merge';
 
 import type { Product } from '@/api/products/types';
@@ -22,7 +23,12 @@ const Icon = ({ focused, ...props }: IconType) => {
 };
 export const CarouselItem = ({ item }: { item: Product }) => {
   return (
-    <>
+    <Link
+      href={{
+        pathname: '/details/[id]',
+        params: { id: item.id },
+      }}
+    >
       <View className="h-64 w-48 rounded-lg bg-white shadow shadow-gray-600">
         <View className="items-center">
           <Image
@@ -52,6 +58,6 @@ export const CarouselItem = ({ item }: { item: Product }) => {
           <Icon focused={false} />
         </View>
       </View>
-    </>
+    </Link>
   );
 };

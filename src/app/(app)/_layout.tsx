@@ -8,6 +8,7 @@ import {
   Favorite as FavoriteIcon,
   Home as HomeIcon,
   Menu as MenuIcon,
+  Sell as SellIcon,
 } from '@/ui/icons';
 
 const renderIcon = (
@@ -28,13 +29,13 @@ const tabs = [
     testID: 'feed-tab',
     headerShown: false,
   },
-  // {
-  //   name: 'product-list',
-  //   title: 'product-list',
-  //   icon: SellIcon,
-  //   testID: 'product-list-tab',
-  //   headerShown: false,
-  // },
+  {
+    name: 'product-list',
+    title: 'Product List',
+    testID: 'product-list-tab',
+    icon: SellIcon,
+    headerShown: false,
+  },
   {
     name: 'settings',
     title: 'Settings',
@@ -102,6 +103,7 @@ export default function TabLayout() {
               renderIcon(icon, color, focused),
             tabBarTestID: testID,
             headerShown,
+            tabBarButton: name === 'product-list' ? () => null : undefined,
           }}
         />
       ))}
