@@ -14,11 +14,12 @@ export interface ProductCardProps {
 
 export const ProductCard = memo(
   ({ name, price, state, image_url, id }: ProductCardProps) => {
+    const detailsRoute = '/details/[id]';
     return (
       <View className="w-full flex-row items-center justify-between space-x-4 rounded-lg bg-white p-3">
         <Link
           href={{
-            pathname: '/details/[id]',
+            pathname: detailsRoute,
             params: { id: id },
           }}
         >
@@ -32,7 +33,7 @@ export const ProductCard = memo(
           <View className="flex-row items-center justify-between">
             <Link
               href={{
-                pathname: '/details/[id]',
+                pathname: detailsRoute,
                 params: { id: id },
               }}
               className='className="h-full w-3/4'
@@ -62,7 +63,15 @@ export const ProductCard = memo(
           </View>
           <View className="flex-row items-center justify-between">
             <Text className="text-lg font-bold">{price}</Text>
-            <Button label="Add to cart" />
+            <Link
+              href={{
+                pathname: detailsRoute,
+                params: { id: id },
+              }}
+              asChild
+            >
+              <Button label="Add to cart" />
+            </Link>
           </View>
         </View>
       </View>
