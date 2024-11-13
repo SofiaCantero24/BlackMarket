@@ -16,16 +16,21 @@ export default function DetailsScreen() {
   const { data } = useGetItemDetails(Number(id));
   const [quantity, setQuantity] = useState<number>(1);
 
-  const mutate = useAddShoppingCartItems({});
+  const { mutate: addProductToCart } = useAddShoppingCartItems({});
 
-  const buy = async () => {
+  const addToCart = async () => {
     try {
-      await mutate.mutateAsync({ itemId: Number(id), quantity });
+      addProductToCart({ itemId: Number(id), quantity });
       showMessage({
         message: 'Producto agregado al carrito',
         type: 'success',
       });
-    } catch (error) {}
+    } catch (error) {
+      showMessage({
+        message: 'Producto agregado al carrito',
+        type: 'success',
+      });
+    }
     router.back();
   };
 
@@ -55,10 +60,10 @@ export default function DetailsScreen() {
           <Text className="font-semi-bold font-">{data?.unit_price}</Text>
           <ImageDisplayer images={data?.pictures} />
           <AddToCartSection
-            stock={data?.stock ?? 0}
+            availableQuantityOptions={data?.stock ?? 0}
             quantity={quantity}
             setQuantity={setQuantity}
-            buy={buy}
+            buy={addToCart}
           />
           <View className="mb-4">
             <Text className="mb-3 mr-2 font-bold">Product description</Text>

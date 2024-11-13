@@ -9,7 +9,7 @@ type DropdownItem = {
 };
 
 type AddToCartSectionProps = {
-  stock: number;
+  availableQuantityOptions: number;
   setQuantity: React.Dispatch<React.SetStateAction<number>>;
   quantity: number;
   buy: () => void;
@@ -19,10 +19,10 @@ export const AddToCartSection = ({
   quantity,
   setQuantity,
   buy,
-  stock,
+  availableQuantityOptions,
 }: AddToCartSectionProps) => {
   const numberItems: DropdownItem[] = Array.from(
-    { length: stock ?? 0 },
+    { length: availableQuantityOptions ?? 0 },
     (_, index) => ({
       label: (index + 1).toString(),
       value: index + 1,
@@ -56,7 +56,9 @@ export const AddToCartSection = ({
         />
       </View>
       <View className="w-4/5 items-center">
-        <Text className=" mr-2 font-bold">Avalability: {stock} items</Text>
+        <Text className=" mr-2 font-bold">
+          Availability: {availableQuantityOptions} items
+        </Text>
         <Button
           className="mt-3 h-12 w-72"
           label="Add to cart"
