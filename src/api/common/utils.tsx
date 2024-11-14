@@ -1,6 +1,8 @@
-import type {
-  GetNextPageParamFunction,
-  GetPreviousPageParamFunction,
+import type { UseMutationOptions } from '@tanstack/react-query';
+import {
+  type GetNextPageParamFunction,
+  type GetPreviousPageParamFunction,
+  useMutation,
 } from '@tanstack/react-query';
 
 import type { PaginateQuery } from '../types';
@@ -77,6 +79,10 @@ export const toSnakeCase = (obj: GenericObject): GenericObject => {
   }
   return newObj;
 };
+
+export const useBaseMutation = <TVariables, TData>(
+  props: UseMutationOptions<TData, string, TVariables, any>
+) => useMutation(props);
 
 const DEFAULT_ERROR_MESSAGE = 'something went wrong';
 const parseError = (data: any) => {

@@ -1,7 +1,9 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
+import { showMessage } from 'react-native-flash-message';
 import { twMerge } from 'tailwind-merge';
 
+import { useAddShoppingCartItems } from '@/api/cart/use-add-line-item';
 import { useGetItemDetails } from '@/api/products/use-details';
 import { AddToCartSection } from '@/components/details/add-to-cart';
 import { ImageDisplayer } from '@/components/details/image-displayer';
@@ -13,6 +15,24 @@ export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
   const { data } = useGetItemDetails(Number(id));
   const [quantity, setQuantity] = useState<number>(1);
+
+  const { mutate: addProductToCart } = useAddShoppingCartItems({});
+
+  const addToCart = async () => {
+    try {
+      addProductToCart({ itemId: Number(id), quantity });
+      showMessage({
+        message: 'Producto agregado al carrito',
+        type: 'success',
+      });
+    } catch (error) {
+      showMessage({
+        message: 'Producto agregado al carrito',
+        type: 'success',
+      });
+    }
+    router.back();
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
@@ -40,9 +60,10 @@ export default function DetailsScreen() {
           <Text className="font-semi-bold font-">{data?.unit_price}</Text>
           <ImageDisplayer images={data?.pictures} />
           <AddToCartSection
+            availableQuantityOptions={data?.stock ?? 0}
             quantity={quantity}
             setQuantity={setQuantity}
-            buy={() => {}}
+            buy={addToCart}
           />
           <View className="mb-4">
             <Text className="mb-3 mr-2 font-bold">Product description</Text>
