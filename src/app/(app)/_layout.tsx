@@ -37,14 +37,13 @@ const tabs = [
     headerShown: false,
   },
   {
-    name: 'settings',
-    title: 'Settings',
+    name: 'shopping-cart',
+    title: 'Shopping Cart',
     icon: CartIcon,
-    testID: 'settings-tab',
     headerShown: false,
   },
   {
-    name: 'shopping-cart',
+    name: 'settings',
     title: 'Settings',
     icon: FavoriteIcon,
     testID: 'setting-tab',

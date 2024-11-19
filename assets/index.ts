@@ -7,6 +7,8 @@ const images = {
   search: () => require('./search.png'),
   dummyProduct: () => require('./dummy-product.png'),
   filterIcon: () => require('./filter_list.png'),
+  trashIcon: () => require('./trash.png'),
+  plusIcon: () => require('./plus.png'),
 };
 
 export type Images = keyof typeof images;
