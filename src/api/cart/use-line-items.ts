@@ -1,6 +1,7 @@
 import { createInfiniteQuery } from 'react-query-kit';
 
 import { client } from '../common';
+import { APICONSTS } from '../consts';
 import type { FetchedShoppingCartResponse } from './types';
 
 type Variables = {
@@ -11,16 +12,25 @@ export const useShoppingCart = createInfiniteQuery({
   queryKey: ['shopping_cart'],
   fetcher: async (
     variables: Variables,
-    { pageParam = 1 }
+    { pageParam = APICONSTS.INITIAL_PAGE }
   ): Promise<FetchedShoppingCartResponse> => {
     const { data } = await client.get<FetchedShoppingCartResponse>(
-      `/shopping_cart?page=${pageParam}&items=${variables.items}`
+      '/shopping_cart',
+      {
+        params: {
+          page: pageParam,
+          items: variables.items,
+        },
+      }
     );
     return data;
   },
   getNextPageParam: (lastPage) => {
-    const nextPageMatch = lastPage.pagination.next_url.match(/page=(\d+)/);
-    return nextPageMatch ? parseInt(nextPageMatch[1], 10) : undefined;
+    const nextUrl = lastPage.pagination.next_url;
+    const queryString = nextUrl.split('?')[1];
+    const urlParams = new URLSearchParams(queryString);
+    const page = urlParams.get('page');
+    return page ? parseInt(page, 10) : undefined;
   },
   initialPageParam: 1,
 });

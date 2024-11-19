@@ -8,7 +8,14 @@ import { useGetItemDetails } from '@/api/products/use-details';
 import { AddToCartSection } from '@/components/details/add-to-cart';
 import { ImageDisplayer } from '@/components/details/image-displayer';
 import { HeaderLogo } from '@/components/header-logo';
-import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from '@/ui';
+import {
+  SafeAreaView,
+  ScrollView,
+  showErrorMessage,
+  Text,
+  TouchableOpacity,
+  View,
+} from '@/ui';
 
 export default function DetailsScreen() {
   const router = useRouter();
@@ -16,21 +23,20 @@ export default function DetailsScreen() {
   const { data } = useGetItemDetails(Number(id));
   const [quantity, setQuantity] = useState<number>(1);
 
-  const { mutate: addProductToCart } = useAddShoppingCartItems({});
+  const { mutate: addProductToCart } = useAddShoppingCartItems({
+    onSuccess: () => {
+      showMessage({
+        message: 'Producto agregado al carrito',
+        type: 'success',
+      });
+    },
+    onError: (error) => {
+      showErrorMessage(error);
+    },
+  });
 
-  const addToCart = async () => {
-    try {
-      addProductToCart({ itemId: Number(id), quantity });
-      showMessage({
-        message: 'Producto agregado al carrito',
-        type: 'success',
-      });
-    } catch (error) {
-      showMessage({
-        message: 'Producto agregado al carrito',
-        type: 'success',
-      });
-    }
+  const addToCart = () => {
+    addProductToCart({ itemId: Number(id), quantity });
     router.back();
   };
 

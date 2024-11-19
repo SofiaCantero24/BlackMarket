@@ -63,15 +63,17 @@ export const ShoppingCard = memo(
     quantity,
     refetch,
   }: ShoppingProductCardProps) => {
-    const { mutate: patchShoppingCartItem } = usePatchShoppingCartItem({});
-
-    const handlePatch = (newQuantity: number) => {
-      try {
-        patchShoppingCartItem({ itemId: id, quantity: newQuantity });
+    const { mutate: patchShoppingCartItem } = usePatchShoppingCartItem({
+      onSuccess: () => {
         refetch();
-      } catch {
-        showErrorMessage('Something went wrong');
-      }
+      },
+      onError: (error) => {
+        showErrorMessage(error);
+      },
+    });
+
+    const handlePatch = async (newQuantity: number) => {
+      patchShoppingCartItem({ itemId: id, quantity: newQuantity });
     };
 
     const detailsRoute = '/details/[id]';

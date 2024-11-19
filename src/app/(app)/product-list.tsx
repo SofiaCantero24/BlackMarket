@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { memo, useState } from 'react';
 import { FlatList } from 'react-native';
 
+import { APICONSTS } from '@/api/consts';
 import type { Product } from '@/api/products/types';
 import { useProducts } from '@/api/products/use-products';
 import { HeaderLogo } from '@/components/header-logo';
@@ -99,7 +100,7 @@ export default function ProductList() {
     fetchNextPage,
     isFetchingNextPage,
   } = useProducts({
-    variables: { items: 7, text: query },
+    variables: { items: APICONSTS.INITIAL_ITEMS, text: query },
   });
 
   const handleLoadMore = () => {

@@ -1,6 +1,7 @@
 import { createInfiniteQuery } from 'react-query-kit';
 
 import { client } from '../common';
+import { APICONSTS, QUERY_KEYS } from '../consts';
 import type { FetchProductsResponse } from './types';
 
 type Variables = {
@@ -9,19 +10,26 @@ type Variables = {
 };
 
 export const useProducts = createInfiniteQuery({
-  queryKey: ['products'],
+  queryKey: QUERY_KEYS.PRODUCTS,
   fetcher: async (
     variables: Variables,
-    { pageParam = 1 }
+    { pageParam = APICONSTS.INITIAL_PAGE }
   ): Promise<FetchProductsResponse> => {
-    const { data } = await client.get<FetchProductsResponse>(
-      `/products?page=${pageParam}&items=${variables.items}&text=${variables.text}`
-    );
+    const { data } = await client.get<FetchProductsResponse>('/products', {
+      params: {
+        page: pageParam,
+        items: variables.items,
+        text: variables.text,
+      },
+    });
     return data;
   },
   getNextPageParam: (lastPage) => {
-    const nextPageMatch = lastPage.pagination.next_url.match(/page=(\d+)/);
-    return nextPageMatch ? parseInt(nextPageMatch[1], 10) : undefined;
+    const nextUrl = lastPage.pagination.next_url;
+    const queryString = nextUrl.split('?')[1];
+    const urlParams = new URLSearchParams(queryString);
+    const page = urlParams.get('page');
+    return page ? parseInt(page, 10) : undefined;
   },
   initialPageParam: 1,
 });
