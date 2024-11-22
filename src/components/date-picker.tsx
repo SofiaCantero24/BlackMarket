@@ -1,3 +1,4 @@
+import { StyleSheet } from 'nativewind';
 import { type ComponentProps } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -5,6 +6,7 @@ import { z } from 'zod';
 
 import type { Input } from '@/ui';
 import { View } from '@/ui';
+import { white } from '@/ui/colors';
 
 type DropdownItem = {
   label: string;
@@ -66,19 +68,12 @@ export const DatePicker = ({ editable }: Props) => {
           name="expirationMonth"
           render={({ field: { onChange, value } }) => (
             <Dropdown
-              style={{
-                width: 200,
-                borderColor: 'black',
-                borderWidth: 2,
-                padding: 8,
-                borderRadius: 8,
-                height: 43,
-                marginBottom: 8,
-              }}
+              style={dropdownStyles.dropdownContainer}
+              placeholderStyle={dropdownStyles.dropdownPlaceHolder}
               data={monthOptions}
               labelField="label"
               valueField="value"
-              placeholder={value?.toString() ?? '1'}
+              placeholder={value?.toString() ?? 'Month'}
               value={value?.toString()}
               onChange={(item: DropdownItem) => {
                 onChange(item.value);
@@ -94,19 +89,12 @@ export const DatePicker = ({ editable }: Props) => {
           name="expirationYear"
           render={({ field: { onChange, value } }) => (
             <Dropdown
-              style={{
-                width: 90,
-                borderColor: 'black',
-                borderWidth: 2,
-                padding: 8,
-                borderRadius: 8,
-                height: 43,
-                marginBottom: 8,
-              }}
+              style={dropdownStyles.dropdownContainer}
+              placeholderStyle={dropdownStyles.dropdownPlaceHolder}
               data={yearOptions}
               labelField="label"
               valueField="value"
-              placeholder={value?.toString() ?? '2024'}
+              placeholder={value?.toString() ?? 'Year'}
               value={value?.toString()}
               onChange={(item: DropdownItem) => {
                 onChange(item.value);
@@ -119,3 +107,19 @@ export const DatePicker = ({ editable }: Props) => {
     </>
   );
 };
+
+const dropdownStyles = StyleSheet.create({
+  dropdownContainer: {
+    width: '100%',
+    borderColor: 'black',
+    borderWidth: 1,
+    padding: 8,
+    borderRadius: 8,
+    height: 43,
+    marginBottom: 8,
+    backgroundColor: white,
+  },
+  dropdownPlaceHolder: {
+    color: 'gray',
+  },
+});

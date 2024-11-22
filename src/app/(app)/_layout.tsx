@@ -56,6 +56,13 @@ const tabs = [
     testID: 'settin-tab',
     headerShown: false,
   },
+  {
+    name: 'payment',
+    title: 'Payment',
+    icon: FavoriteIcon,
+    testID: 'payment-tab',
+    headerShown: false,
+  },
 ];
 
 export default function TabLayout() {
@@ -102,7 +109,8 @@ export default function TabLayout() {
               renderIcon(icon, color, focused),
             tabBarTestID: testID,
             headerShown,
-            tabBarButton: name === 'product-list' ? () => null : undefined,
+            tabBarButton:
+              name === ('product-list' || 'payment') ? () => null : undefined,
           }}
         />
       ))}
