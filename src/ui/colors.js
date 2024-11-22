@@ -81,4 +81,5 @@ module.exports = {
   light_gray: '#E0E0E0',
   restored: '#559F21',
   new: '#2751B9',
+  light_background: '#F4F7FA',
 };
