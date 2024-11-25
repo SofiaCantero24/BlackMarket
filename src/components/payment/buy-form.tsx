@@ -5,22 +5,32 @@ import { z } from 'zod';
 
 import { withFormHOC } from '@/core/hoc/hoc-form';
 import { FormInputs } from '@/core/hoc/multiple-input';
-import { Button, Checkbox, ScrollView, Text, View } from '@/ui';
+import { Checkbox, ScrollView, Text, View } from '@/ui';
 
 import { DatePicker, schema as dateSchema } from '../date-picker';
 import { HeaderLogo } from '../header-logo';
 
-export const _adressSchema = z.object({
+type SectionFormProps = {
+  title?: string;
+  fields: any[];
+  control: any;
+  editable: boolean;
+  titleClassname?: string;
+  inputClassname?: string;
+  textClassname?: string;
+};
+
+export const _addressSchema = z.object({
   city: z.string({
     required_error: 'City required',
   }),
   country: z.string({
     required_error: 'Country required',
   }),
-  adress1: z.string({
-    required_error: 'Adress required',
+  address1: z.string({
+    required_error: 'Address required',
   }),
-  adress2: z.string().optional(),
+  address2: z.string().optional(),
   postalCode: z.string({
     required_error: 'Postal Code required',
   }),
@@ -35,14 +45,14 @@ const _cardSchema = z.object({
   }),
 });
 
-const schema = _adressSchema.and(_cardSchema).and(dateSchema);
+const schema = _addressSchema.and(_cardSchema).and(dateSchema);
 
 export type TBuyFormFields = z.infer<typeof schema>;
 
 export type BuyFormSubmitHandler = (fields: TBuyFormFields) => void;
 export type BuyFormSubmitErrorHandler = SubmitErrorHandler<TBuyFormFields>;
 
-export const adressFields = [
+export const addressFields = [
   {
     name: 'city',
     label: 'City',
@@ -56,16 +66,16 @@ export const adressFields = [
     placeholder: 'Country',
   },
   {
-    name: 'adress1',
-    label: 'Adress line 1',
+    name: 'address1',
+    label: 'Address line 1',
     required: true,
-    placeholder: 'Adress 1',
+    placeholder: 'Address 1',
   },
   {
-    name: 'adress2',
-    label: 'Adress line 2',
+    name: 'address2',
+    label: 'Address line 2',
     required: false,
-    placeholder: 'Adress 1',
+    placeholder: 'Address 1',
   },
   {
     name: 'postalCode',
@@ -90,6 +100,25 @@ const cardFields = [
   },
 ];
 
+const SectionForm = ({
+  title,
+  fields,
+  control,
+  editable,
+}: SectionFormProps) => {
+  return (
+    <FormInputs
+      title={title}
+      fields={fields}
+      control={control}
+      editable={editable}
+      titleClassname="my-4 text-lg font-semibold"
+      inputClassname="border rounded-lg p-3 bg-white"
+      textClassname="text-lg mb-2"
+    />
+  );
+};
+
 const BuyForm = withFormHOC(
   {
     schema,
@@ -100,58 +129,51 @@ const BuyForm = withFormHOC(
   },
   ({ formMethods, disabled }) => {
     const { control } = formMethods;
-    const [showAdressForm, setShowAdressForm] = useState(true);
-
+    const [showAddressForm, setShowAddressForm] = useState(true);
     return (
       <View className="pb-16">
         <HeaderLogo />
         <ScrollView className="bg-light_background px-4">
-          <FormInputs
-            title="Please add your shipping adress"
-            fields={adressFields}
+          <SectionForm
+            title="Please add your shipping address"
             control={control}
+            fields={addressFields}
             editable={!disabled}
-            titleClassname="my-4 text-lg font-semibold"
-            inputClassname="border rounded-lg p-3 bg-white"
-            textClassname="text-lg mb-2"
           />
-          <FormInputs
+          <SectionForm
             title="Payment information"
+            control={control}
             fields={cardFields.slice(0, 1)}
             editable={!disabled}
-            control={control}
-            titleClassname="my-4 text-lg font-semibold"
-            inputClassname="border rounded-lg p-3 bg-white"
-            textClassname="text-lg"
           />
           <View className="">
-            <Text className="mb-1.5 mt-3">Expiration date *</Text>
+            <Text className="mb-1.5 mt-3 text-lg">Expiration date *</Text>
             <FormProvider {...formMethods}>
               <DatePicker editable={!disabled} />
             </FormProvider>
           </View>
-          <FormInputs
+          <SectionForm
+            control={control}
             fields={cardFields.slice(1, 2)}
             editable={!disabled}
-            control={control}
-            inputClassname="border rounded-lg p-3 bg-white"
-            textClassname="text-lg"
           />
+          {showAddressForm && (
+            <SectionForm
+              title="Please add your billing address"
+              fields={addressFields}
+              control={control}
+              editable={!disabled}
+            />
+          )}
           <View className="mb-2 mt-6 w-80 self-center">
             <Checkbox
-              onChange={setShowAdressForm}
-              checked={showAdressForm}
+              onChange={setShowAddressForm}
+              checked={showAddressForm}
               label="Use my shipping address as my billing address"
               accessibilityLabel="Label 2"
               className="mb-4"
             />
           </View>
-          <Button
-            label="Buy"
-            className="h-12"
-            textClassName="font-bold text-base"
-          />
-          <Button variant="outline" label="Cancel" className="mb-8" />
         </ScrollView>
       </View>
     );
