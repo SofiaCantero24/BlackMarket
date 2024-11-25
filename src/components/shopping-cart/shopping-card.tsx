@@ -3,6 +3,7 @@ import { Link } from 'expo-router';
 import { memo } from 'react';
 
 import { usePatchShoppingCartItem } from '@/api/cart/use-patch-line-item';
+import { useRemoveShoppingCartItem } from '@/api/cart/use-remove-line-item';
 import { Image, showErrorMessage, Text, TouchableOpacity, View } from '@/ui';
 
 export interface ShoppingProductCardProps {
@@ -18,17 +19,23 @@ export interface ShoppingProductCardProps {
 type QuantityControllerProps = {
   quantity: number;
   handlePress: (newQuantity: number) => void;
+  removeItem: () => void;
 };
 
 const QuantityController = ({
   quantity,
   handlePress,
+  removeItem,
 }: QuantityControllerProps) => {
   return (
     <View className="flex-row items-center gap-4">
       <TouchableOpacity
         onPress={() => {
-          handlePress(0);
+          if (quantity > 1) {
+            handlePress(quantity - 1);
+          } else {
+            removeItem();
+          }
         }}
       >
         <Image
@@ -53,6 +60,20 @@ const QuantityController = ({
   );
 };
 
+const StateLabel = ({ state }: { state: string }) => {
+  return (
+    <View
+      className={`mb-2 mt-1 w-12 items-center space-x-2 rounded-md rounded-tl-none px-2 py-1 ${
+        state === 'used' ? 'bg-restored' : 'bg-new'
+      }`}
+    >
+      <Text className={`text-xs font-semibold text-white`}>
+        {state === 'used' ? 'Used' : 'New'}
+      </Text>
+    </View>
+  );
+};
+
 export const ShoppingCard = memo(
   ({
     name,
@@ -64,16 +85,21 @@ export const ShoppingCard = memo(
     refetch,
   }: ShoppingProductCardProps) => {
     const { mutate: patchShoppingCartItem } = usePatchShoppingCartItem({
-      onSuccess: () => {
-        refetch();
-      },
+      onSuccess: refetch,
       onError: (error) => {
         showErrorMessage(error);
       },
     });
+    const { mutate: removeItem } = useRemoveShoppingCartItem({
+      onSuccess: refetch,
+    });
 
-    const handlePatch = async (newQuantity: number) => {
+    const handlePatch = (newQuantity: number) => {
       patchShoppingCartItem({ itemId: id, quantity: newQuantity });
+    };
+
+    const handleRemove = () => {
+      removeItem({ itemId: id });
     };
 
     const detailsRoute = '/details/[id]';
@@ -104,18 +130,16 @@ export const ShoppingCard = memo(
             </Link>
             <Text>{price}</Text>
           </View>
-          <View
-            className={`mb-2 mt-1 w-12 items-center space-x-2 rounded-md rounded-tl-none px-2 py-1 ${
-              state === 'used' ? 'bg-restored' : 'bg-new'
-            }`}
-          >
-            <Text className={`text-xs font-semibold text-white`}>
-              {state === 'used' ? 'Used' : 'New'}
-            </Text>
-          </View>
+          <StateLabel state={state} />
           <View className="mt-4 flex-row items-center justify-between">
-            <Text className="text-lg font-semibold text-link">Remove</Text>
-            <QuantityController quantity={quantity} handlePress={handlePatch} />
+            <TouchableOpacity onPress={handleRemove}>
+              <Text className="text-lg font-semibold text-link">Remove</Text>
+            </TouchableOpacity>
+            <QuantityController
+              quantity={quantity}
+              handlePress={handlePatch}
+              removeItem={handleRemove}
+            />
           </View>
         </View>
       </View>
