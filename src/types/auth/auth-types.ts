@@ -69,3 +69,36 @@ export type InputProps = {
   inputVariables: InputVariableProps;
   inputConstants: InputConstantsProps;
 };
+
+export const addressSchema = z.object({
+  city: z.string({
+    required_error: 'City required',
+  }),
+  country: z.string({
+    required_error: 'Country required',
+  }),
+  address1: z.string({
+    required_error: 'Address required',
+  }),
+  address2: z.string().optional(),
+  postalCode: z.string({
+    required_error: 'Postal Code required',
+  }),
+});
+
+const cardSchema = z.object({
+  cardNumber: z.string({
+    required_error: 'Card number required',
+  }),
+  cvcCode: z.string({
+    required_error: 'CVC code required',
+  }),
+});
+
+const paymentSchema = addressSchema.and(cardSchema);
+
+export type PaymentFormType = z.infer<typeof paymentSchema>;
+
+export type PaymentFormProps = {
+  onSubmit?: SubmitHandler<PaymentFormType>;
+};

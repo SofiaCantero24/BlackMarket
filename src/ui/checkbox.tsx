@@ -72,7 +72,7 @@ const Label = ({ text, testID, className = '' }: LabelProps) => {
 };
 
 export const CheckboxIcon = ({ checked = false }: IconProps) => {
-  const color = checked ? colors.primary[300] : colors.charcoal[400];
+  const color = '#CCCFD6';
   return (
     <MotiView
       style={{
@@ -81,9 +81,9 @@ export const CheckboxIcon = ({ checked = false }: IconProps) => {
         borderColor: color,
       }}
       className="items-center justify-center rounded-[5px] border-2"
-      from={{ backgroundColor: 'transparent', borderColor: '#CCCFD6' }}
+      from={{ backgroundColor: 'transparent', borderColor: color }}
       animate={{
-        backgroundColor: checked ? color : 'transparent',
+        backgroundColor: 'transparent',
         borderColor: color,
       }}
       transition={{
@@ -97,10 +97,7 @@ export const CheckboxIcon = ({ checked = false }: IconProps) => {
         transition={{ opacity: { type: 'timing', duration: 100 } }}
       >
         <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <Path
-            d="m16.726 7-.64.633c-2.207 2.212-3.878 4.047-5.955 6.158l-2.28-1.928-.69-.584L6 12.66l.683.577 2.928 2.477.633.535.591-.584c2.421-2.426 4.148-4.367 6.532-6.756l.633-.64L16.726 7Z"
-            fill="#fff"
-          />
+          <Path d="M7 12l3 3 7-7" fill="#fff" stroke="#000" />
         </Svg>
       </MotiView>
     </MotiView>
