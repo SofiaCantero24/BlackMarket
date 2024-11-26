@@ -157,6 +157,14 @@ const BuyForm = withFormHOC(
             fields={cardFields.slice(1, 2)}
             editable={!disabled}
           />
+          {showAddressForm && (
+            <SectionForm
+              title="Please add your billing address"
+              fields={addressFields}
+              control={control}
+              editable={!disabled}
+            />
+          )}
           <View className="mb-2 mt-6 w-80 self-center">
             <Checkbox
               onChange={setShowAddressForm}
