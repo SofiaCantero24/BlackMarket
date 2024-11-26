@@ -18,32 +18,11 @@ const monthOptions = Array.from({ length: 12 }, (_, index) => ({
   value: index + 1,
 }));
 
-const yearOptions = [
-  {
-    label: '2024',
-    value: 2024,
-  },
-  {
-    label: '2025',
-    value: 2025,
-  },
-  {
-    label: '2026',
-    value: 2026,
-  },
-  {
-    label: '2027',
-    value: 2027,
-  },
-  {
-    label: '2028',
-    value: 2028,
-  },
-  {
-    label: '2029',
-    value: 2029,
-  },
-];
+const currentYear = new Date().getFullYear();
+const yearOptions = Array.from({ length: 6 }, (_, i) => ({
+  label: (currentYear + i).toString(),
+  value: currentYear + i,
+}));
 
 export const schema = z.object({
   expirationMonth: z.number().min(1, 'Month required'),

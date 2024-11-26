@@ -110,7 +110,9 @@ export default function TabLayout() {
             tabBarTestID: testID,
             headerShown,
             tabBarButton:
-              name === ('product-list' || 'payment') ? () => null : undefined,
+              name === 'product-list' || name === 'payment'
+                ? () => null
+                : undefined,
           }}
         />
       ))}

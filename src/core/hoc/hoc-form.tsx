@@ -17,6 +17,7 @@ import type { z } from 'zod';
 export type BaseFormProps<T extends FieldValues> = {
   onSubmitHandler: SubmitHandler<T>;
   onSubmitErrorHandler?: SubmitErrorHandler<T>;
+  onCancel?: () => void;
   disabled?: boolean;
   defaultValues?: T;
 };
@@ -32,6 +33,7 @@ const withFormHOC = <T extends FieldValues>(
   WrappedComponent: React.ComponentType<{
     formMethods: UseFormReturn<T>;
     disabled?: boolean;
+    onCancel?: () => void;
   }>
 ) => {
   return forwardRef(
