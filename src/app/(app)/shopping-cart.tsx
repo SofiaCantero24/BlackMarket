@@ -1,4 +1,4 @@
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
 import { FlatList } from 'react-native';
 
@@ -13,20 +13,17 @@ export default function ShoppingCart() {
     useShoppingCart({
       variables: { items: APICONSTS.INITIAL_ITEMS },
     });
-
   const handleReachEnd = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   };
-
   useFocusEffect(
     useCallback(() => {
       refetch();
     }, [refetch])
   );
   const productsToDisplay = data?.pages.flatMap((page) => page.lineItems) || [];
-
   return (
     <SafeAreaView>
       <HeaderLogo />
@@ -72,6 +69,9 @@ export default function ShoppingCart() {
             className="m-0 flex h-12 items-center"
             textClassName="my-2 px-2"
             label="Go to checkout"
+            onPress={() => {
+              router.push('/payment');
+            }}
           />
         </View>
       </View>

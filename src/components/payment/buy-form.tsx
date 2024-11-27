@@ -45,7 +45,26 @@ const _cardSchema = z.object({
   }),
 });
 
-const schema = _addressSchema.and(_cardSchema).and(dateSchema);
+export const aditionalAddressSchema = z.object({
+  adtionalCity: z.string({
+    required_error: 'City required',
+  }),
+  aditionalCountry: z.string({
+    required_error: 'Country required',
+  }),
+  aditionalAddress1: z.string({
+    required_error: 'Address required',
+  }),
+  aditionalAddress2: z.string().optional(),
+  adtionalPostalCode: z.string({
+    required_error: 'Postal Code required',
+  }),
+});
+
+const schema = _addressSchema
+  .and(_cardSchema)
+  .and(dateSchema)
+  .and(aditionalAddressSchema);
 
 export type TBuyFormFields = z.infer<typeof schema>;
 
@@ -79,6 +98,39 @@ export const addressFields = [
   },
   {
     name: 'postalCode',
+    label: 'Postal Code',
+    required: true,
+    placeholder: 'Postal code',
+  },
+];
+
+export const aditionalAddressFields = [
+  {
+    name: 'aditionalCity',
+    label: 'City',
+    required: true,
+    placeholder: 'City',
+  },
+  {
+    name: 'aditionalCountry',
+    label: 'Country',
+    required: true,
+    placeholder: 'Country',
+  },
+  {
+    name: 'adtionalAddress1',
+    label: 'Address line 1',
+    required: true,
+    placeholder: 'Address 1',
+  },
+  {
+    name: 'adtionalAddress2',
+    label: 'Address line 2',
+    required: false,
+    placeholder: 'Address 1',
+  },
+  {
+    name: 'adtionalPostalCode',
     label: 'Postal Code',
     required: true,
     placeholder: 'Postal code',
@@ -130,8 +182,9 @@ const BuyForm = withFormHOC(
   ({ formMethods, disabled }) => {
     const { control } = formMethods;
     const [showAddressForm, setShowAddressForm] = useState(true);
+
     return (
-      <View className="pb-16">
+      <View>
         <HeaderLogo />
         <ScrollView className="bg-light_background px-4">
           <SectionForm
@@ -157,10 +210,10 @@ const BuyForm = withFormHOC(
             fields={cardFields.slice(1, 2)}
             editable={!disabled}
           />
-          {showAddressForm && (
+          {!showAddressForm && (
             <SectionForm
               title="Please add your billing address"
-              fields={addressFields}
+              fields={aditionalAddressFields}
               control={control}
               editable={!disabled}
             />
