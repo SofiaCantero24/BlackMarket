@@ -61,10 +61,7 @@ export const aditionalAddressSchema = z.object({
   }),
 });
 
-const schema = _addressSchema
-  .and(_cardSchema)
-  .and(dateSchema)
-  .and(aditionalAddressSchema);
+const schema = _addressSchema.and(_cardSchema).and(dateSchema);
 
 export type TBuyFormFields = z.infer<typeof schema>;
 
