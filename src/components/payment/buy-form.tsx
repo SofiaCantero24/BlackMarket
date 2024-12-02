@@ -45,18 +45,18 @@ const _cardSchema = z.object({
   }),
 });
 
-export const aditionalAddressSchema = z.object({
-  adtionalCity: z.string({
+export const additionalAddressSchema = z.object({
+  addtionalCity: z.string({
     required_error: 'City required',
   }),
-  aditionalCountry: z.string({
+  additionalCountry: z.string({
     required_error: 'Country required',
   }),
-  aditionalAddress1: z.string({
+  additionalAddress1: z.string({
     required_error: 'Address required',
   }),
-  aditionalAddress2: z.string().optional(),
-  adtionalPostalCode: z.string({
+  additionalAddress2: z.string().optional(),
+  addtionalPostalCode: z.string({
     required_error: 'Postal Code required',
   }),
 });
@@ -64,7 +64,7 @@ export const aditionalAddressSchema = z.object({
 const schema = _addressSchema
   .and(_cardSchema)
   .and(dateSchema)
-  .and(aditionalAddressSchema);
+  .and(additionalAddressSchema);
 
 export type TBuyFormFields = z.infer<typeof schema>;
 
@@ -104,33 +104,33 @@ export const addressFields = [
   },
 ];
 
-export const aditionalAddressFields = [
+export const additionalAddressFields = [
   {
-    name: 'aditionalCity',
+    name: 'additionalCity',
     label: 'City',
     required: true,
     placeholder: 'City',
   },
   {
-    name: 'aditionalCountry',
+    name: 'additionalCountry',
     label: 'Country',
     required: true,
     placeholder: 'Country',
   },
   {
-    name: 'adtionalAddress1',
+    name: 'additionalAddress1',
     label: 'Address line 1',
     required: true,
     placeholder: 'Address 1',
   },
   {
-    name: 'adtionalAddress2',
+    name: 'additionalAddress2',
     label: 'Address line 2',
     required: false,
     placeholder: 'Address 1',
   },
   {
-    name: 'adtionalPostalCode',
+    name: 'additionalPostalCode',
     label: 'Postal Code',
     required: true,
     placeholder: 'Postal code',
@@ -213,7 +213,7 @@ const BuyForm = withFormHOC(
           {!showAddressForm && (
             <SectionForm
               title="Please add your billing address"
-              fields={aditionalAddressFields}
+              fields={additionalAddressFields}
               control={control}
               editable={!disabled}
             />
