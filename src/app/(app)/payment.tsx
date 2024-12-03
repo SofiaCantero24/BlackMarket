@@ -79,11 +79,7 @@ export default function Payment() {
     >
       <SafeAreaView className="flex-1 bg-light_background">
         <ScrollView className="-mb-12">
-          <BuyForm
-            ref={buyFormRef}
-            onSubmitHandler={onSubmitHandler}
-            disabled={false}
-          />
+          <BuyForm ref={buyFormRef} onSubmitHandler={onSubmitHandler} />
           <FormButtons
             handleSubmit={() => {
               buyFormRef.current?.submit;
