@@ -10,7 +10,7 @@ type CreditCard = {
   cvc: string;
 };
 
-type ShippingAddres = {
+type ShippingAddress = {
   city: string;
   country: string;
   line_1: string;
@@ -21,7 +21,7 @@ type ShippingAddres = {
 
 type OrderVariables = {
   credit_card: CreditCard;
-  shipping_address: ShippingAddres;
+  shipping_address: ShippingAddress;
 };
 
 type Order = {

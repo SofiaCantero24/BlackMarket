@@ -51,10 +51,7 @@ export default function Payment() {
             city: data.city,
             country: data.country,
             line_1: data.address1,
-            line_2:
-              typeof data.address2 === 'undefined' || data.address2 === ''
-                ? '-'
-                : data.address2,
+            line_2: !data.address2 ? '-' : data.address2,
             postal_code: data.postalCode,
             state: data.country,
           },
