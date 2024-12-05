@@ -1,28 +1,25 @@
 import { createInfiniteQuery } from 'react-query-kit';
 
 import { client } from '../common';
-import { API_CONSTS } from '../consts';
-import type { FetchedShoppingCartResponse } from './types';
+import { API_CONSTS, QUERY_KEYS } from '../consts';
+import type { PurchasesResponse } from './types';
 
 type Variables = {
   items: number;
 };
 
-export const useShoppingCart = createInfiniteQuery({
-  queryKey: ['shopping_cart'],
+export const usePruchases = createInfiniteQuery({
+  queryKey: QUERY_KEYS.PURCHASES,
   fetcher: async (
     variables: Variables,
     { pageParam = API_CONSTS.INITIAL_PAGE }
-  ): Promise<FetchedShoppingCartResponse> => {
-    const { data } = await client.get<FetchedShoppingCartResponse>(
-      '/shopping_cart',
-      {
-        params: {
-          page: pageParam,
-          items: variables.items,
-        },
-      }
-    );
+  ): Promise<PurchasesResponse> => {
+    const { data } = await client.get<PurchasesResponse>('/orders', {
+      params: {
+        page: pageParam,
+        items: variables.items,
+      },
+    });
     return data;
   },
   getNextPageParam: (lastPage) => {
