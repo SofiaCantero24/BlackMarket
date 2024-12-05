@@ -37,6 +37,13 @@ const tabs = [
     headerShown: false,
   },
   {
+    name: 'purchases',
+    title: 'Purchases',
+    testID: 'purchases-tab',
+    icon: SellIcon,
+    headerShown: false,
+  },
+  {
     name: 'shopping-cart',
     title: 'Shopping Cart',
     icon: CartIcon,
