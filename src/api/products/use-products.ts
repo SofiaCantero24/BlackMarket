@@ -1,7 +1,7 @@
 import { createInfiniteQuery } from 'react-query-kit';
 
 import { client } from '../common';
-import { APICONSTS, QUERY_KEYS } from '../consts';
+import { API_CONSTS, QUERY_KEYS } from '../consts';
 import type { FetchProductsResponse } from './types';
 
 type Variables = {
@@ -13,7 +13,7 @@ export const useProducts = createInfiniteQuery({
   queryKey: QUERY_KEYS.PRODUCTS,
   fetcher: async (
     variables: Variables,
-    { pageParam = APICONSTS.INITIAL_PAGE }
+    { pageParam = API_CONSTS.INITIAL_PAGE }
   ): Promise<FetchProductsResponse> => {
     const { data } = await client.get<FetchProductsResponse>('/products', {
       params: {

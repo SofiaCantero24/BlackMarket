@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { FlatList } from 'react-native';
 
 import { useShoppingCart } from '@/api/cart/use-line-items';
-import { APICONSTS } from '@/api/consts';
+import { API_CONSTS } from '@/api/consts';
 import { HeaderLogo } from '@/components/header-logo';
 import { ShoppingCard } from '@/components/shopping-cart/shopping-card';
 import { Button, SafeAreaView, Text, View } from '@/ui';
@@ -11,7 +11,7 @@ import { Button, SafeAreaView, Text, View } from '@/ui';
 export default function ShoppingCart() {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage, refetch } =
     useShoppingCart({
-      variables: { items: APICONSTS.INITIAL_ITEMS },
+      variables: { items: API_CONSTS.INITIAL_ITEMS },
     });
   const handleReachEnd = () => {
     if (hasNextPage && !isFetchingNextPage) {
