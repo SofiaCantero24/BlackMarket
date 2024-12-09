@@ -66,7 +66,7 @@ export const PurchaseCard = memo(
           <StateLabel state={state} />
           <View className="mt-4 flex-row items-center justify-between">
             <Text className="text-md font-semibold">{quantity} item</Text>
-            <Text> Bought on</Text>
+            <Text>Bought on</Text>
           </View>
         </View>
       </View>

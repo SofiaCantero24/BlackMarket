@@ -8,7 +8,7 @@ type Variables = {
   items: number;
 };
 
-export const usePruchases = createInfiniteQuery({
+export const usePurchases = createInfiniteQuery({
   queryKey: QUERY_KEYS.PURCHASES,
   fetcher: async (
     variables: Variables,
