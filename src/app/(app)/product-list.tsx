@@ -1,6 +1,6 @@
 import images from 'assets';
-import { useRouter } from 'expo-router';
-import { memo, useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { memo, useCallback, useState } from 'react';
 import { FlatList } from 'react-native';
 
 import { API_CONSTS } from '@/api/consts';
@@ -14,6 +14,7 @@ import { Image, SafeAreaView, Text, TouchableOpacity, View } from '@/ui';
 type ProductsListProps = {
   products: Product[];
   onEndReached: () => void;
+  refetch: () => void;
 };
 
 const FiltersButton = ({ products }: { products: Product[] }) => {
@@ -51,45 +52,49 @@ const SearchResult = ({
   }
 };
 
-const ProductsList = memo(({ products, onEndReached }: ProductsListProps) => {
-  if (products.length === 0) {
+const ProductsList = memo(
+  ({ products, onEndReached, refetch }: ProductsListProps) => {
+    if (products.length === 0) {
+      return (
+        <View className="m-4 gap-4 self-center text-4xl font-semibold">
+          <Text>No products found</Text>
+        </View>
+      );
+    }
+
     return (
-      <View className="m-4 gap-4 self-center text-4xl font-semibold">
-        <Text>No products found</Text>
+      <View className="pt-2">
+        <FlatList
+          onEndReached={onEndReached}
+          data={products}
+          renderItem={({ item, index }) => {
+            const isFirstItem = index === 0;
+            const isLastItem = index === products.length - 1;
+
+            return (
+              <View
+                className={`mx-4 border ${isFirstItem ? 'rounded-t-lg' : ''} ${
+                  isLastItem ? 'rounded-b-lg' : ''
+                }`}
+              >
+                <ProductCard
+                  id={item.id}
+                  price={item.unit_price}
+                  state={item.state}
+                  name={item.title}
+                  image_url={item.pictures[0]}
+                  isFavorite={item.is_favorite}
+                  refetch={refetch}
+                />
+              </View>
+            );
+          }}
+          keyExtractor={(item) => item.id.toString()}
+        />
       </View>
     );
   }
-
-  return (
-    <View className="pt-2">
-      <FlatList
-        onEndReached={onEndReached}
-        data={products}
-        renderItem={({ item, index }) => {
-          const isFirstItem = index === 0;
-          const isLastItem = index === products.length - 1;
-
-          return (
-            <View
-              className={`mx-4 border ${isFirstItem ? 'rounded-t-lg' : ''} ${
-                isLastItem ? 'rounded-b-lg' : ''
-              }`}
-            >
-              <ProductCard
-                id={item.id}
-                price={item.unit_price}
-                state={item.state}
-                name={item.title}
-                image_url={item.pictures[0]}
-              />
-            </View>
-          );
-        }}
-        keyExtractor={(item) => item.id.toString()}
-      />
-    </View>
-  );
-});
+);
 
 export default function ProductList() {
   const { back } = useRouter();
@@ -99,6 +104,7 @@ export default function ProductList() {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
+    refetch,
   } = useProducts({
     variables: { items: API_CONSTS.INITIAL_ITEMS, text: query },
   });
@@ -112,6 +118,12 @@ export default function ProductList() {
   const clearQuery = () => {
     setQuery('');
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
   const productsToDisplay = products?.pages.flatMap((page) => page.data) || [];
 
@@ -130,6 +142,7 @@ export default function ProductList() {
         <ProductsList
           products={productsToDisplay}
           onEndReached={handleLoadMore}
+          refetch={refetch}
         />
       </View>
       <FiltersButton products={productsToDisplay} />
