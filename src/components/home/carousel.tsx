@@ -1,4 +1,5 @@
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback } from 'react';
 import { FlatList } from 'react-native';
 
 import { useProducts } from '@/api/products/use-products';
@@ -12,6 +13,7 @@ export const HorizontalCarousel = () => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
+    refetch,
   } = useProducts({ variables: { items: 7, text: '' } });
   const productsToDisplay = products?.pages.flatMap((page) => page.data) || [];
   const handleLoadMore = () => {
@@ -19,6 +21,13 @@ export const HorizontalCarousel = () => {
       fetchNextPage();
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
+
   return (
     <>
       <FlatList
@@ -27,7 +36,9 @@ export const HorizontalCarousel = () => {
         contentContainerClassName="gap-4 px-4 items-center"
         horizontal
         showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => <CarouselItem item={item} />}
+        renderItem={({ item }) => (
+          <CarouselItem item={item} refetch={refetch} />
+        )}
         onEndReached={handleLoadMore}
       />
       <TouchableOpacity
