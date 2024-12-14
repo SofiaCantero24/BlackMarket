@@ -3,14 +3,7 @@ import { memo } from 'react';
 
 import { useAddFavorite } from '@/api/favorites/add-favorite';
 import { useRemoveFavorite } from '@/api/favorites/remove-favorite';
-import {
-  Button,
-  Image,
-  showErrorMessage,
-  Text,
-  TouchableOpacity,
-  View,
-} from '@/ui';
+import { Button, Image, Text, TouchableOpacity, View } from '@/ui';
 import { Favorite } from '@/ui/icons';
 
 export interface ProductCardProps {
@@ -20,38 +13,17 @@ export interface ProductCardProps {
   state: string;
   image_url: string;
   isFavorite: boolean;
-  refetch: () => void;
 }
 
 export type TitleAndFavoriteProps = {
   id: number;
   name: string;
   isFavorite: boolean;
-  refetch: () => void;
 };
 
-const TitleAndFavorite = ({
-  id,
-  name,
-  isFavorite,
-  refetch,
-}: TitleAndFavoriteProps) => {
-  const { mutate: addFavorite } = useAddFavorite({
-    onSuccess: () => {
-      refetch();
-    },
-    onError: () => {
-      showErrorMessage('Something went wrong');
-    },
-  });
-  const { mutate: removeFavorite } = useRemoveFavorite({
-    onSuccess: () => {
-      refetch();
-    },
-    onError: () => {
-      showErrorMessage('Something went wrong');
-    },
-  });
+const TitleAndFavorite = ({ id, name, isFavorite }: TitleAndFavoriteProps) => {
+  const { mutate: addFavorite } = useAddFavorite({});
+  const { mutate: removeFavorite } = useRemoveFavorite({});
 
   const toggleFavorite = () => {
     if (isFavorite) {
@@ -89,15 +61,7 @@ const TitleAndFavorite = ({
 };
 
 export const ProductCard = memo(
-  ({
-    name,
-    price,
-    state,
-    image_url,
-    id,
-    isFavorite,
-    refetch,
-  }: ProductCardProps) => {
+  ({ name, price, state, image_url, id, isFavorite }: ProductCardProps) => {
     const detailsRoute = '/details/[id]';
     return (
       <View className="w-full flex-row items-center justify-between space-x-4 rounded-lg bg-white p-3">
@@ -114,12 +78,7 @@ export const ProductCard = memo(
           />
         </Link>
         <View className="w-full flex-1 px-4">
-          <TitleAndFavorite
-            id={id}
-            isFavorite={isFavorite}
-            name={name}
-            refetch={refetch}
-          />
+          <TitleAndFavorite id={id} isFavorite={isFavorite} name={name} />
           <View
             className={`mb-2 mt-1 w-12 items-center space-x-2 rounded-md rounded-tl-none px-2 py-1 ${
               state === 'used' ? 'bg-restored' : 'bg-new'

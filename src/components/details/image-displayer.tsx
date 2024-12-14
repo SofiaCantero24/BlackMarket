@@ -3,13 +3,12 @@ import { FlatList } from 'react-native';
 
 import { useAddFavorite } from '@/api/favorites/add-favorite';
 import { useRemoveFavorite } from '@/api/favorites/remove-favorite';
-import { Image, showErrorMessage, TouchableOpacity, View } from '@/ui';
+import { Image, TouchableOpacity, View } from '@/ui';
 import { Favorite } from '@/ui/icons';
 
 type ImageDisplayerProps = {
   images: string[] | undefined;
   isFavorite: boolean;
-  refetch: () => void;
   id: number;
 };
 
@@ -35,25 +34,11 @@ const Icon = ({ focused, ...props }: IconType) => {
 export const ImageDisplayer = ({
   images,
   isFavorite,
-  refetch,
   id,
 }: ImageDisplayerProps) => {
-  const { mutate: addFavorite } = useAddFavorite({
-    onSuccess: () => {
-      refetch();
-    },
-    onError: () => {
-      showErrorMessage('Something went wrong');
-    },
-  });
-  const { mutate: removeFavorite } = useRemoveFavorite({
-    onSuccess: () => {
-      refetch();
-    },
-    onError: () => {
-      showErrorMessage('Something went wrong');
-    },
-  });
+  const { mutate: addFavorite } = useAddFavorite({});
+  const { mutate: removeFavorite } = useRemoveFavorite({});
+
   const toggleFavorite = () => {
     if (isFavorite) {
       removeFavorite(id);
@@ -61,10 +46,13 @@ export const ImageDisplayer = ({
       addFavorite(id);
     }
   };
+
   const [selectedImage, setSelectedImage] = useState(0);
+
   if (images === undefined) {
     return;
   }
+
   return (
     <>
       <View className="h-68 w-68 relative my-3 w-full rounded-lg">

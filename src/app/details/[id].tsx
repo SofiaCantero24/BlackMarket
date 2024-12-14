@@ -20,7 +20,7 @@ import {
 export default function DetailsScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
-  const { data, refetch } = useGetItemDetails(Number(id));
+  const { data } = useGetItemDetails(Number(id));
   const [quantity, setQuantity] = useState<number>(1);
   const { mutate: addProductToCart } = useAddShoppingCartItems({
     onSuccess: () => {
@@ -69,7 +69,6 @@ export default function DetailsScreen() {
             isFavorite={data?.isFavorite}
             images={data?.pictures}
             id={data?.id}
-            refetch={refetch}
           />
           <AddToCartSection
             availableQuantityOptions={data?.stock ?? 0}

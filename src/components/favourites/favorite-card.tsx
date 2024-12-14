@@ -1,26 +1,27 @@
 import { Link } from 'expo-router';
 import { memo } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 import { useRemoveFavorite } from '@/api/favorites/remove-favorite';
 import { Button, Image, Text, View } from '@/ui';
 
-export interface ShoppingProductCardProps {
+interface FavoriteCardProps {
   id: number;
   name: string;
   price: string;
   state: string;
   image_url: string;
-  refetch: () => void;
 }
 
 const StateLabel = ({ state }: { state: string }) => {
   return (
     <View
-      className={`mb-2 mt-1 w-12 items-center space-x-2 rounded-md px-2 py-1 ${
+      className={twMerge(
+        'mb-2 mt-1 w-12 items-center space-x-2 rounded-md px-2 py-1',
         state === 'used' ? 'bg-restored' : 'bg-new'
-      }`}
+      )}
     >
-      <Text className={`text-xs font-semibold text-white`}>
+      <Text className="text-xs font-semibold text-white">
         {state === 'used' ? 'Used' : 'New'}
       </Text>
     </View>
@@ -28,22 +29,17 @@ const StateLabel = ({ state }: { state: string }) => {
 };
 
 export const FavoriteCard = memo(
-  ({
-    name,
-    price,
-    state,
-    image_url,
-    id,
-    refetch,
-  }: ShoppingProductCardProps) => {
+  ({ name, price, state, image_url, id }: FavoriteCardProps) => {
     const { mutate: removeFavorite } = useRemoveFavorite({});
+
     const detailsRoute = '/details/[id]';
+
     return (
       <View className="w-full flex-row items-center justify-between space-x-4 rounded-lg bg-white p-3">
         <Link
           href={{
             pathname: detailsRoute,
-            params: { id: id },
+            params: { id },
           }}
         >
           <Image
@@ -57,7 +53,7 @@ export const FavoriteCard = memo(
             <Link
               href={{
                 pathname: detailsRoute,
-                params: { id: id },
+                params: { id },
               }}
               className='className="h-full w-2/4'
             >
@@ -73,7 +69,6 @@ export const FavoriteCard = memo(
               className="h-12 border bg-transparent px-5"
               onPress={() => {
                 removeFavorite(id);
-                refetch();
               }}
             />
           </View>

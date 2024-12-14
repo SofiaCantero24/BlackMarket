@@ -5,7 +5,7 @@ import { twMerge } from 'tailwind-merge';
 import { useAddFavorite } from '@/api/favorites/add-favorite';
 import { useRemoveFavorite } from '@/api/favorites/remove-favorite';
 import type { Product } from '@/api/products/types';
-import { Image, showErrorMessage, Text, View } from '@/ui';
+import { Image, Text, View } from '@/ui';
 import { Favorite } from '@/ui/icons';
 
 import type { TitleAndFavoriteProps } from '../products-list/product-card';
@@ -29,28 +29,9 @@ const Icon = ({ focused, ...props }: IconType) => {
   );
 };
 
-const TitleAndFavorite = ({
-  isFavorite,
-  name,
-  id,
-  refetch,
-}: TitleAndFavoriteProps) => {
-  const { mutate: addFavorite } = useAddFavorite({
-    onSuccess: () => {
-      refetch();
-    },
-    onError: () => {
-      showErrorMessage('Something went wrong');
-    },
-  });
-  const { mutate: removeFavorite } = useRemoveFavorite({
-    onSuccess: () => {
-      refetch();
-    },
-    onError: () => {
-      showErrorMessage('Something went wrong');
-    },
-  });
+const TitleAndFavorite = ({ isFavorite, name, id }: TitleAndFavoriteProps) => {
+  const { mutate: addFavorite } = useAddFavorite({});
+  const { mutate: removeFavorite } = useRemoveFavorite({});
 
   const toggleFavorite = () => {
     if (isFavorite) {
@@ -58,7 +39,6 @@ const TitleAndFavorite = ({
     } else {
       addFavorite(id);
     }
-    refetch();
   };
 
   return (
@@ -73,13 +53,7 @@ const TitleAndFavorite = ({
   );
 };
 
-export const CarouselItem = ({
-  item,
-  refetch,
-}: {
-  item: Product;
-  refetch: () => void;
-}) => {
+export const CarouselItem = ({ item }: { item: Product }) => {
   return (
     <View className="h-64 w-48 rounded-lg bg-white shadow shadow-gray-600">
       <Link
@@ -122,7 +96,6 @@ export const CarouselItem = ({
         id={item.id}
         isFavorite={item.is_favorite}
         name={item.title}
-        refetch={refetch}
       />
     </View>
   );

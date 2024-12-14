@@ -2,6 +2,7 @@ import images from 'assets';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { memo, useCallback, useState } from 'react';
 import { FlatList } from 'react-native';
+import { twMerge } from 'tailwind-merge';
 
 import { API_CONSTS } from '@/api/consts';
 import type { Product } from '@/api/products/types';
@@ -14,7 +15,6 @@ import { Image, SafeAreaView, Text, TouchableOpacity, View } from '@/ui';
 type ProductsListProps = {
   products: Product[];
   onEndReached: () => void;
-  refetch: () => void;
 };
 
 const FiltersButton = ({ products }: { products: Product[] }) => {
@@ -52,49 +52,48 @@ const SearchResult = ({
   }
 };
 
-const ProductsList = memo(
-  ({ products, onEndReached, refetch }: ProductsListProps) => {
-    if (products.length === 0) {
-      return (
-        <View className="m-4 gap-4 self-center text-4xl font-semibold">
-          <Text>No products found</Text>
-        </View>
-      );
-    }
-
+const ProductsList = memo(({ products, onEndReached }: ProductsListProps) => {
+  if (products.length === 0) {
     return (
-      <View className="pt-2">
-        <FlatList
-          onEndReached={onEndReached}
-          data={products}
-          renderItem={({ item, index }) => {
-            const isFirstItem = index === 0;
-            const isLastItem = index === products.length - 1;
-
-            return (
-              <View
-                className={`mx-4 border ${isFirstItem ? 'rounded-t-lg' : ''} ${
-                  isLastItem ? 'rounded-b-lg' : ''
-                }`}
-              >
-                <ProductCard
-                  id={item.id}
-                  price={item.unit_price}
-                  state={item.state}
-                  name={item.title}
-                  image_url={item.pictures[0]}
-                  isFavorite={item.is_favorite}
-                  refetch={refetch}
-                />
-              </View>
-            );
-          }}
-          keyExtractor={(item) => item.id.toString()}
-        />
+      <View className="m-4 gap-4 self-center text-4xl font-semibold">
+        <Text>No products found</Text>
       </View>
     );
   }
-);
+
+  return (
+    <View className="pt-2">
+      <FlatList
+        onEndReached={onEndReached}
+        data={products}
+        renderItem={({ item, index }) => {
+          const isFirstItem = index === 0;
+          const isLastItem = index === products.length - 1;
+
+          return (
+            <View
+              className={twMerge(
+                'mx-4 border',
+                isFirstItem && 'rounded-t-lg',
+                isLastItem && 'rounded-b-lg'
+              )}
+            >
+              <ProductCard
+                id={item.id}
+                price={item.unit_price}
+                state={item.state}
+                name={item.title}
+                image_url={item.pictures[0]}
+                isFavorite={item.is_favorite}
+              />
+            </View>
+          );
+        }}
+        keyExtractor={(item) => item.id.toString()}
+      />
+    </View>
+  );
+});
 
 export default function ProductList() {
   const { back } = useRouter();
@@ -142,7 +141,6 @@ export default function ProductList() {
         <ProductsList
           products={productsToDisplay}
           onEndReached={handleLoadMore}
-          refetch={refetch}
         />
       </View>
       <FiltersButton products={productsToDisplay} />

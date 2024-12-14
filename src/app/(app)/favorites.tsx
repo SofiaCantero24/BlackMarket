@@ -1,6 +1,7 @@
 import { useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
 import { FlatList } from 'react-native';
+import { twMerge } from 'tailwind-merge';
 
 import { API_CONSTS } from '@/api/consts';
 import { useFavorites } from '@/api/favorites/use-favorites';
@@ -42,9 +43,11 @@ export default function Favorite() {
 
               return (
                 <View
-                  className={`mx-4 border ${
-                    isFirstItem ? 'rounded-t-lg' : ''
-                  } ${isLastItem ? 'rounded-b-lg' : ''}`}
+                  className={twMerge(
+                    'mx-4 border',
+                    isFirstItem && 'rounded-t-lg',
+                    isLastItem && 'rounded-b-lg'
+                  )}
                 >
                   <FavoriteCard
                     id={item.product.id}
@@ -52,7 +55,6 @@ export default function Favorite() {
                     state={item.product.state}
                     name={item.product.title}
                     image_url={item.product.pictures[0]}
-                    refetch={refetch}
                   />
                 </View>
               );

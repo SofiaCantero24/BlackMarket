@@ -1,4 +1,6 @@
-import type { UseMutationOptions } from '@tanstack/react-query';
+import { type UseMutationOptions, useQueryClient } from '@tanstack/react-query';
+
+import { showErrorMessage } from '@/ui';
 
 import { client } from '../common';
 import { parseAxiosError, useBaseMutation } from '../common/utils';
@@ -14,9 +16,20 @@ export const removeFavorite = async (id: number): Promise<null> => {
 
 export const useRemoveFavorite = (
   props: UseMutationOptions<null, string, number, any>
-) =>
-  useBaseMutation<number, null>({
+) => {
+  const queryClient = useQueryClient();
+
+  return useBaseMutation<number, null>({
     mutationKey: ['removeFavorite'],
     mutationFn: removeFavorite,
+    onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+      props?.onSuccess?.(data, variables, context);
+    },
+    onError: (error, variables, context) => {
+      showErrorMessage('Something went wrong');
+      props?.onError?.(error, variables, context);
+    },
     ...props,
   });
+};

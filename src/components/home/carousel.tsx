@@ -36,9 +36,7 @@ export const HorizontalCarousel = () => {
         contentContainerClassName="gap-4 px-4 items-center"
         horizontal
         showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <CarouselItem item={item} refetch={refetch} />
-        )}
+        renderItem={({ item }) => <CarouselItem item={item} />}
         onEndReached={handleLoadMore}
       />
       <TouchableOpacity
