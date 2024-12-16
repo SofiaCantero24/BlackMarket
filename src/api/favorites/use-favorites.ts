@@ -1,6 +1,6 @@
 import { createInfiniteQuery } from 'react-query-kit';
 
-import { client } from '../common';
+import { client, DEFAULT_PAGE_PARAMS } from '../common';
 import { API_CONSTS, QUERY_KEYS } from '../consts';
 import type { FavoriteProductsResponse } from './types';
 
@@ -25,12 +25,5 @@ export const useFavorites = createInfiniteQuery({
     );
     return data;
   },
-  getNextPageParam: (lastPage) => {
-    const nextUrl = lastPage.pagination.next_url;
-    const queryString = nextUrl.split('?')[1];
-    const urlParams = new URLSearchParams(queryString);
-    const page = urlParams.get('page');
-    return page ? parseInt(page, 10) : undefined;
-  },
-  initialPageParam: 1,
+  ...DEFAULT_PAGE_PARAMS,
 });

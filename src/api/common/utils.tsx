@@ -5,6 +5,7 @@ import {
   useMutation,
 } from '@tanstack/react-query';
 
+import { API_CONSTS } from '../consts';
 import type { PaginateQuery } from '../types';
 
 type KeyParams = {
@@ -122,4 +123,17 @@ export const parseAxiosError = (error: any) => {
     }
   }
   return DEFAULT_ERROR_MESSAGE;
+};
+
+export const getPage = (lastPage: any): number | undefined => {
+  const nextUrl = lastPage.pagination.next_url;
+  const queryString = nextUrl.split('?')[1];
+  const urlParams = new URLSearchParams(queryString);
+  const page = urlParams.get('page');
+  return page ? parseInt(page, 10) : undefined;
+};
+
+export const DEFAULT_PAGE_PARAMS = {
+  getNextPageParam: (lastPage: any) => getPage(lastPage),
+  initialPageParam: API_CONSTS.INITIAL_PAGE,
 };
