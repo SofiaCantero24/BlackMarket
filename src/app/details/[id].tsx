@@ -8,6 +8,7 @@ import { useGetItemDetails } from '@/api/products/use-details';
 import { AddToCartSection } from '@/components/details/add-to-cart';
 import { ImageDisplayer } from '@/components/details/image-displayer';
 import { HeaderLogo } from '@/components/header-logo';
+import { productDetail } from '@/translations/en.json';
 import {
   SafeAreaView,
   ScrollView,
@@ -77,7 +78,9 @@ export default function DetailsScreen() {
             buy={addToCart}
           />
           <View className="mb-4">
-            <Text className="mb-3 mr-2 font-bold">Product description</Text>
+            <Text className="mb-3 mr-2 font-bold">
+              {productDetail.labels.productDescription}
+            </Text>
             <Text>{data?.description}</Text>
           </View>
         </View>

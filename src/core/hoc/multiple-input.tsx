@@ -1,3 +1,4 @@
+import { symbols } from '@/translations/en.json';
 import { ControlledInput, Text, View } from '@/ui';
 
 type FieldProps = {
@@ -32,7 +33,7 @@ export const FormInputs = ({
       {fields.map(({ label, name, placeholder, required }) => (
         <View key={name} className="">
           <Text className={textClassname}>
-            {label} {required ? '*' : ' '}
+            {label} {required ? symbols.required : ' '}
           </Text>
           <ControlledInput
             className={inputClassname}

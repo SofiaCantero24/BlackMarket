@@ -6,6 +6,7 @@ import { cssInterop } from 'nativewind';
 import { useForm } from 'react-hook-form';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
+import { auth } from '@/translations/en.json';
 import type {
   InputConstantsProps,
   InputProps,
@@ -22,13 +23,15 @@ const BottomTextComponenent = () => {
   return (
     <View className="items-center">
       <Text className="mb-4 w-3/4 items-center text-center text-base font-normal">
-        By signing up, you accept the
-        <Text className="font-bold text-link"> Data Policy.</Text>
+        {auth.labels.dataAgreement.label}
+        <Text className="font-bold text-link">
+          {auth.labels.dataAgreement.link}
+        </Text>
       </Text>
       <Text className="mb-2 items-center text-center text-base font-normal">
-        Already have an account?
+        {auth.labels.alreadyHaveAccount}
         <Link href="/login">
-          <Text className="font-bold text-link"> Log in</Text>
+          <Text className="font-bold text-link"> {auth.buttons.login}</Text>
         </Link>
       </Text>
     </View>
@@ -52,7 +55,7 @@ const ErrorMessageComponent = ({ showError }: { showError: boolean }) => {
     <View className="items-center">
       {showError && (
         <Text className="mb-1 mt-2 w-4/5 text-center font-bold text-error">
-          Sorry! Your email or password are incorrect.
+          {auth.error}
         </Text>
       )}
     </View>
@@ -92,20 +95,24 @@ export const SignupForm = ({ onSubmit = () => {} }: SingupFormProps) => {
   const inputProps: InputVariableProps[] = [
     {
       name: 'email',
-      label: 'Email',
-      placeholder: 'Type your email or telephone',
+      label: auth.labels.email,
+      placeholder: auth.placeholders.email,
     },
-    { name: 'name', label: 'Full Name', placeholder: 'Type your full name' },
+    {
+      name: 'name',
+      label: auth.labels.name,
+      placeholder: auth.placeholders.name,
+    },
     {
       name: 'password',
-      label: 'Password',
-      placeholder: 'Type your password',
+      label: auth.labels.password,
+      placeholder: auth.placeholders.password,
       secureTextEntry: true,
     },
     {
       name: 'password_confirmation',
-      label: 'Confirm Password',
-      placeholder: 'Re-type your password',
+      label: auth.labels.confirmPassword,
+      placeholder: auth.placeholders.confirmPassword,
       secureTextEntry: true,
     },
   ];

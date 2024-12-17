@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { FlatList } from 'react-native';
 
 import { useProducts } from '@/api/products/use-products';
+import { dashboard } from '@/translations/en.json';
 import { Text, TouchableOpacity } from '@/ui';
 
 import { CarouselItem } from './carousel-item';
@@ -45,7 +46,9 @@ export const HorizontalCarousel = () => {
           router.push('/(app)/product-list');
         }}
       >
-        <Text className="font-semibold text-link">See all</Text>
+        <Text className="font-semibold text-link">
+          {dashboard.labels.seeAll}
+        </Text>
       </TouchableOpacity>
     </>
   );

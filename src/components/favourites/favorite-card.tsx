@@ -3,6 +3,7 @@ import { memo } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import { useRemoveFavorite } from '@/api/favorites/remove-favorite';
+import { common } from '@/translations/en.json';
 import { Button, Image, Text, View } from '@/ui';
 
 interface FavoriteCardProps {
@@ -64,7 +65,7 @@ export const FavoriteCard = memo(
           <StateLabel state={state} />
           <View className="mt-2 flex-row-reverse items-center justify-between">
             <Button
-              label="Remove"
+              label={common.buttons.remove}
               textClassName="text-black"
               className="h-12 border bg-transparent px-5"
               onPress={() => {

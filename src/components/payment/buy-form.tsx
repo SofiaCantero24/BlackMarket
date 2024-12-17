@@ -5,6 +5,7 @@ import { z } from 'zod';
 
 import { withFormHOC } from '@/core/hoc/hoc-form';
 import { FormInputs } from '@/core/hoc/multiple-input';
+import { purchaseForm } from '@/translations/en.json';
 import { Checkbox, ScrollView, Text, View } from '@/ui';
 
 import { DatePicker, schema as dateSchema } from '../date-picker';
@@ -22,42 +23,42 @@ type SectionFormProps = {
 
 export const _addressSchema = z.object({
   city: z.string({
-    required_error: 'City required',
+    required_error: purchaseForm.error.cityRequired,
   }),
   country: z.string({
-    required_error: 'Country required',
+    required_error: purchaseForm.error.countryRequired,
   }),
   address1: z.string({
-    required_error: 'Address required',
+    required_error: purchaseForm.error.addressReqired,
   }),
   address2: z.string().optional(),
   postalCode: z.string({
-    required_error: 'Postal Code required',
+    required_error: purchaseForm.error.postalCodeRequired,
   }),
 });
 
 const _cardSchema = z.object({
   cardNumber: z.string({
-    required_error: 'Card number required',
+    required_error: purchaseForm.error.cardNumberRequired,
   }),
   cvcCode: z.string({
-    required_error: 'CVC code required',
+    required_error: purchaseForm.error.cvcRequired,
   }),
 });
 
 export const additionalAddressSchema = z.object({
   addtionalCity: z.string({
-    required_error: 'City required',
+    required_error: purchaseForm.error.addressReqired,
   }),
   additionalCountry: z.string({
-    required_error: 'Country required',
+    required_error: purchaseForm.error.countryRequired,
   }),
   additionalAddress1: z.string({
-    required_error: 'Address required',
+    required_error: purchaseForm.error.addressReqired,
   }),
   additionalAddress2: z.string().optional(),
   addtionalPostalCode: z.string({
-    required_error: 'Postal Code required',
+    required_error: purchaseForm.error.postalCodeRequired,
   }),
 });
 
@@ -74,81 +75,81 @@ export type BuyFormSubmitErrorHandler = SubmitErrorHandler<TBuyFormFields>;
 export const addressFields = [
   {
     name: 'city',
-    label: 'City',
+    label: purchaseForm.labels.city,
     required: true,
-    placeholder: 'City',
+    placeholder: purchaseForm.placeholders.city,
   },
   {
     name: 'country',
-    label: 'Country',
+    label: purchaseForm.labels.country,
     required: true,
-    placeholder: 'Country',
+    placeholder: purchaseForm.placeholders.country,
   },
   {
     name: 'address1',
-    label: 'Address line 1',
+    label: purchaseForm.labels.addressLine1,
     required: true,
-    placeholder: 'Address 1',
+    placeholder: purchaseForm.placeholders.addressLine1,
   },
   {
     name: 'address2',
-    label: 'Address line 2',
+    label: purchaseForm.labels.addressLine2,
     required: false,
-    placeholder: 'Address 1',
+    placeholder: purchaseForm.placeholders.addressLine2,
   },
   {
     name: 'postalCode',
-    label: 'Postal Code',
+    label: purchaseForm.labels.postalCode,
     required: true,
-    placeholder: 'Postal code',
+    placeholder: purchaseForm.placeholders.postalCode,
   },
 ];
 
 export const additionalAddressFields = [
   {
     name: 'additionalCity',
-    label: 'City',
+    label: purchaseForm.labels.city,
     required: true,
-    placeholder: 'City',
+    placeholder: purchaseForm.placeholders.city,
   },
   {
     name: 'additionalCountry',
-    label: 'Country',
+    label: purchaseForm.labels.country,
     required: true,
-    placeholder: 'Country',
+    placeholder: purchaseForm.placeholders.country,
   },
   {
     name: 'additionalAddress1',
-    label: 'Address line 1',
+    label: purchaseForm.labels.addressLine1,
     required: true,
-    placeholder: 'Address 1',
+    placeholder: purchaseForm.placeholders.addressLine1,
   },
   {
     name: 'additionalAddress2',
-    label: 'Address line 2',
+    label: purchaseForm.labels.addressLine2,
     required: false,
-    placeholder: 'Address 1',
+    placeholder: purchaseForm.placeholders.addressLine2,
   },
   {
     name: 'additionalPostalCode',
-    label: 'Postal Code',
+    label: purchaseForm.labels.postalCode,
     required: true,
-    placeholder: 'Postal code',
+    placeholder: purchaseForm.placeholders.postalCode,
   },
 ];
 
 const cardFields = [
   {
     name: 'cardNumber',
-    label: 'Card Number',
+    label: purchaseForm.labels.cardNumber,
     required: true,
-    placeholder: 'Card number',
+    placeholder: purchaseForm.placeholders.cardNumber,
   },
   {
     name: 'cvcCode',
-    label: 'CVC code',
+    label: purchaseForm.placeholders.cvcCode,
     required: true,
-    placeholder: 'CVC code',
+    placeholder: purchaseForm.placeholders.cvcCode,
   },
 ];
 
@@ -188,19 +189,21 @@ const BuyForm = withFormHOC(
         <HeaderLogo />
         <ScrollView className="bg-light_background px-4">
           <SectionForm
-            title="Please add your shipping address"
+            title={purchaseForm.labels.addShippingAddress}
             control={control}
             fields={addressFields}
             editable={!disabled}
           />
           <SectionForm
-            title="Payment information"
+            title={purchaseForm.labels.paymentInformation}
             control={control}
             fields={cardFields.slice(0, 1)}
             editable={!disabled}
           />
-          <View className="">
-            <Text className="mb-1.5 mt-3 text-lg">Expiration date *</Text>
+          <View>
+            <Text className="mb-1.5 mt-3 text-lg">
+              {purchaseForm.labels.expirationDate} {}
+            </Text>
             <FormProvider {...formMethods}>
               <DatePicker editable={!disabled} />
             </FormProvider>
@@ -212,7 +215,7 @@ const BuyForm = withFormHOC(
           />
           {!showAddressForm && (
             <SectionForm
-              title="Please add your billing address"
+              title={purchaseForm.labels.addBillingAddress}
               fields={additionalAddressFields}
               control={control}
               editable={!disabled}
@@ -222,7 +225,7 @@ const BuyForm = withFormHOC(
             <Checkbox
               onChange={setShowAddressForm}
               checked={showAddressForm}
-              label="Use my shipping address as my billing address"
+              label={purchaseForm.labels.checkBox}
               accessibilityLabel="Label 2"
               className="mb-4"
             />

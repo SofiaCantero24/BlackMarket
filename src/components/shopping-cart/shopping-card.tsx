@@ -4,6 +4,7 @@ import { memo } from 'react';
 
 import { usePatchShoppingCartItem } from '@/api/cart/use-patch-line-item';
 import { useRemoveShoppingCartItem } from '@/api/cart/use-remove-line-item';
+import { common } from '@/translations/en.json';
 import { Image, showErrorMessage, Text, TouchableOpacity, View } from '@/ui';
 
 export interface ShoppingProductCardProps {
@@ -93,16 +94,14 @@ export const ShoppingCard = memo(
     const { mutate: removeItem } = useRemoveShoppingCartItem({
       onSuccess: refetch,
     });
-
     const handlePatch = (newQuantity: number) => {
       patchShoppingCartItem({ itemId: id, quantity: newQuantity });
     };
-
     const handleRemove = () => {
       removeItem({ itemId: id });
     };
-
     const detailsRoute = '/details/[id]';
+
     return (
       <View className="w-full flex-row items-center justify-between space-x-4 rounded-lg bg-white p-3">
         <Link
@@ -133,7 +132,9 @@ export const ShoppingCard = memo(
           <StateLabel state={state} />
           <View className="mt-4 flex-row items-center justify-between">
             <TouchableOpacity onPress={handleRemove}>
-              <Text className="text-lg font-semibold text-link">Remove</Text>
+              <Text className="text-lg font-semibold text-link">
+                {common.buttons.remove}
+              </Text>
             </TouchableOpacity>
             <QuantityController
               quantity={quantity}

@@ -1,6 +1,7 @@
 import images from 'assets';
 import { useEffect, useState } from 'react';
 
+import { productList } from '@/translations/en.json';
 import { Image, Input, View } from '@/ui';
 
 type SearchBarProps = {
@@ -20,7 +21,7 @@ export const SearchBar = ({ setQuery, query }: SearchBarProps) => {
       <View className="h-12 w-full flex-row items-center justify-between rounded-lg border-[0.5px] border-neutral-400 bg-white pl-2 pr-8">
         <View className="flex w-full items-center">
           <Input
-            placeholder="Search for products"
+            placeholder={productList.placeholders.searchBar}
             className="-mb-2 flex-1 p-2 text-black"
             placeholderTextColor="#000000"
             value={searchTerm}

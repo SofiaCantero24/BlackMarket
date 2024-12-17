@@ -1,6 +1,127 @@
 {
+  "auth": {
+    "buttons": {
+      "login": "Log in",
+      "signup": "Sign up"
+    },
+    "error": "Sorry! Your email or password are incorrect.",
+    "labels": {
+      "alreadyHaveAccount": "Already have an account? ",
+      "confirmPassword": "Confirm Password",
+      "dataAgreement": {
+        "label": "By signing up, you accept the ",
+        "link": "Data Policy"
+      },
+      "email": "Email",
+      "forgotPassword": "I forgot my password",
+      "name": "Full Name",
+      "password": "Password",
+      "withoutAccount": "Don't have an account?"
+    },
+    "placeholders": {
+      "confirmPassword": "Re-type your password",
+      "email": "Type your email or telephone",
+      "name": "Type your name",
+      "password": "Type your password"
+    }
+  },
+  "common": {
+    "buttons": {
+      "remove": "Remove"
+    }
+  },
+  "dashboard": {
+    "labels": {
+      "credit": "Credit",
+      "crypto": "Crypto",
+      "paymentMethods": "Payment Methods",
+      "paypal": "Paypal",
+      "seeAll": "See all"
+    },
+    "promotions": {
+      "checkOutPromotion": "Check out our new and restored furniture",
+      "fedEx": "FedEx",
+      "poweredByFedEx": "Powered by ",
+      "shipmentUpgrade": "We upgraded our shipments many levels up.",
+      "shopTodayDiscount": "Shop today and get a 10% discount!"
+    }
+  },
+  "favorites": {
+    "labels": {
+      "tittle": "My favourites"
+    }
+  },
   "onboarding": {
     "message": "Welcome to rootstrap app site"
+  },
+  "productDetail": {
+    "buttons": {
+      "addToCart": "Add to cart"
+    },
+    "labels": {
+      "availability": "Availability",
+      "items": "items",
+      "productDescription": "Product description",
+      "quanity": "Quanity"
+    }
+  },
+  "productList": {
+    "buttons": {
+      "filters": "Filters"
+    },
+    "labels": {
+      "back": "Back",
+      "clearAll": "Clear all",
+      "noItemsFound": "No products found",
+      "searchedFor": "You searched for"
+    },
+    "placeholders": {
+      "searchBar": "Search for products"
+    }
+  },
+  "purchaseForm": {
+    "buttons": {
+      "buy": "Buy",
+      "cancel": "Cancel"
+    },
+    "error": {
+      "addressReqired": "Address required",
+      "cardNumberRequired": "Card number required",
+      "cityRequired": "City required",
+      "countryRequired": "Country required",
+      "cvcRequired": "CVC code required",
+      "postalCodeRequired": "Postal Code required"
+    },
+    "labels": {
+      "addBillingAddress": "Please add your billing address",
+      "addShippingAddress": "Please add your shipping address",
+      "addressLine1": "Address line 1",
+      "addressLine2": "Address line 2",
+      "cardNumber": "Card number",
+      "checkBox": "Use my shipping address as my billing address",
+      "city": "City",
+      "country": "Country",
+      "cvcCode": "CVC code",
+      "expirationDate": "Expiration date",
+      "paymentInformation": "Payment information",
+      "postalCode": "Postal Code"
+    },
+    "placeholders": {
+      "addressLine1": "First address",
+      "addressLine2": "Second address",
+      "cardNumber": "Card number",
+      "city": "City",
+      "country": "Country",
+      "cvcCode": "CVC",
+      "month": "Month",
+      "postalCode": "Postal Code",
+      "year": "Year"
+    }
+  },
+  "purchases": {
+    "labels": {
+      "previousPurchases": "My previous purchases"
+    }
   },
   "settings": {
     "about": "About",
@@ -28,6 +149,17 @@
     "title": "Settings",
     "version": "Version",
     "website": "Website"
+  },
+  "shoppingCart": {
+    "buttons": {
+      "checkout": "Go to checkout"
+    },
+    "labels": {
+      "total": "TOTAL"
+    }
+  },
+  "symbols": {
+    "required": "*"
   },
   "welcome": "Welcome to rootstrap app site"
 }
