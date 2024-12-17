@@ -1,7 +1,8 @@
 import images from 'assets';
-import { useRouter } from 'expo-router';
-import { memo, useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { memo, useCallback, useState } from 'react';
 import { FlatList } from 'react-native';
+import { twMerge } from 'tailwind-merge';
 
 import { API_CONSTS } from '@/api/consts';
 import type { Product } from '@/api/products/types';
@@ -71,9 +72,11 @@ const ProductsList = memo(({ products, onEndReached }: ProductsListProps) => {
 
           return (
             <View
-              className={`mx-4 border ${isFirstItem ? 'rounded-t-lg' : ''} ${
-                isLastItem ? 'rounded-b-lg' : ''
-              }`}
+              className={twMerge(
+                'mx-4 border',
+                isFirstItem && 'rounded-t-lg',
+                isLastItem && 'rounded-b-lg'
+              )}
             >
               <ProductCard
                 id={item.id}
@@ -81,6 +84,7 @@ const ProductsList = memo(({ products, onEndReached }: ProductsListProps) => {
                 state={item.state}
                 name={item.title}
                 image_url={item.pictures[0]}
+                isFavorite={item.is_favorite}
               />
             </View>
           );
@@ -99,6 +103,7 @@ export default function ProductList() {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
+    refetch,
   } = useProducts({
     variables: { items: API_CONSTS.INITIAL_ITEMS, text: query },
   });
@@ -112,6 +117,12 @@ export default function ProductList() {
   const clearQuery = () => {
     setQuery('');
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
   const productsToDisplay = products?.pages.flatMap((page) => page.data) || [];
 

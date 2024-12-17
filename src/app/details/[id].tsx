@@ -22,7 +22,6 @@ export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
   const { data } = useGetItemDetails(Number(id));
   const [quantity, setQuantity] = useState<number>(1);
-
   const { mutate: addProductToCart } = useAddShoppingCartItems({
     onSuccess: () => {
       showMessage({
@@ -34,11 +33,13 @@ export default function DetailsScreen() {
       showErrorMessage(error);
     },
   });
-
   const addToCart = () => {
     addProductToCart({ itemId: Number(id), quantity });
     router.back();
   };
+  if (!data) {
+    return null;
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
@@ -64,7 +65,11 @@ export default function DetailsScreen() {
           <Text className="text-2xl font-semibold">{data?.title}</Text>
           <Text className="text-2xl font-light">{data?.category.name}</Text>
           <Text className="font-semi-bold font-">{data?.unit_price}</Text>
-          <ImageDisplayer images={data?.pictures} />
+          <ImageDisplayer
+            isFavorite={data?.isFavorite}
+            images={data?.pictures}
+            id={data?.id}
+          />
           <AddToCartSection
             availableQuantityOptions={data?.stock ?? 0}
             quantity={quantity}

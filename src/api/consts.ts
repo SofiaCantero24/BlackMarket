@@ -3,6 +3,7 @@ export const QUERY_KEYS = {
   PRODUCTS: ['products'],
   ITEM_DETAILS: ['getItemDetails'],
   PURCHASES: ['purchases'],
+  FAVORITES: ['favorites'],
 };
 
 export const API_CONSTS = {
