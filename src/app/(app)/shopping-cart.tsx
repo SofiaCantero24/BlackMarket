@@ -1,29 +1,61 @@
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
 import { FlatList } from 'react-native';
+import { twMerge } from 'tailwind-merge';
 
 import { useShoppingCart } from '@/api/cart/use-line-items';
 import { API_CONSTS } from '@/api/consts';
 import { HeaderLogo } from '@/components/header-logo';
 import { ShoppingCard } from '@/components/shopping-cart/shopping-card';
+import { shoppingCart } from '@/translations/en.json';
 import { Button, SafeAreaView, Text, View } from '@/ui';
+
+type TotalPriceBarProps = {
+  totalPrice?: string;
+};
+
+const TotalPriceBar = ({ totalPrice }: TotalPriceBarProps) => {
+  return (
+    <View className="mt-5 flex-row items-center justify-between px-4">
+      <View className="flex-row items-center">
+        <Text className="text-xl font-semibold">
+          {shoppingCart.labels.total}
+        </Text>
+        <View className="mx-5 h-px w-12 items-center justify-center bg-black shadow-lg" />
+        <Text className="text-xl font-semibold">{totalPrice}</Text>
+      </View>
+      <Button
+        className="m-0 flex h-12 items-center"
+        textClassName="my-2 px-2"
+        label={shoppingCart.buttons.checkout}
+        onPress={() => {
+          router.push('/payment');
+        }}
+      />
+    </View>
+  );
+};
 
 export default function ShoppingCart() {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage, refetch } =
     useShoppingCart({
       variables: { items: API_CONSTS.INITIAL_ITEMS },
     });
+
   const handleReachEnd = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   };
+
   useFocusEffect(
     useCallback(() => {
       refetch();
     }, [refetch])
   );
+
   const productsToDisplay = data?.pages.flatMap((page) => page.lineItems) || [];
+
   return (
     <SafeAreaView>
       <HeaderLogo />
@@ -36,12 +68,13 @@ export default function ShoppingCart() {
           renderItem={({ item, index }) => {
             const isFirstItem = index === 0;
             const isLastItem = index === productsToDisplay.length - 1;
-
             return (
               <View
-                className={`mx-4 border ${isFirstItem ? 'rounded-t-lg' : ''} ${
-                  isLastItem ? 'rounded-b-lg' : ''
-                }`}
+                className={twMerge(
+                  'mx-4 border',
+                  isFirstItem && 'rounded-t-lg',
+                  isLastItem && 'rounded-b-lg'
+                )}
               >
                 <ShoppingCard
                   id={item.id}
@@ -57,23 +90,7 @@ export default function ShoppingCart() {
           }}
           keyExtractor={(item) => item.id.toString()}
         />
-        <View className="mt-5 flex-row items-center justify-between px-4">
-          <View className="flex-row items-center">
-            <Text className="text-xl font-semibold">TOTAL</Text>
-            <View className="mx-5 h-px w-12 items-center justify-center bg-black shadow-lg" />
-            <Text className="text-xl font-semibold">
-              {data?.pages[0].totalPrice}
-            </Text>
-          </View>
-          <Button
-            className="m-0 flex h-12 items-center"
-            textClassName="my-2 px-2"
-            label="Go to checkout"
-            onPress={() => {
-              router.push('/payment');
-            }}
-          />
-        </View>
+        <TotalPriceBar totalPrice={data?.pages[0].totalPrice} />
       </View>
     </SafeAreaView>
   );

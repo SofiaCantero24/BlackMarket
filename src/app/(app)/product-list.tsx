@@ -10,6 +10,7 @@ import { useProducts } from '@/api/products/use-products';
 import { HeaderLogo } from '@/components/header-logo';
 import { ProductCard } from '@/components/products-list/product-card';
 import { SearchBar } from '@/components/search-bar';
+import { productList } from '@/translations/en.json';
 import { Image, SafeAreaView, Text, TouchableOpacity, View } from '@/ui';
 
 type ProductsListProps = {
@@ -42,10 +43,12 @@ const SearchResult = ({
     return (
       <View className="flex-row justify-between px-5 pt-3">
         <Text className="text-lg text-gray-600">
-          You searched for "{query}”
+          {productList.labels.searchedFor} "{query}”
         </Text>
         <TouchableOpacity onPress={clearQuery}>
-          <Text className="text-lg text-link">Clear all</Text>
+          <Text className="text-lg text-link">
+            {productList.labels.clearAll}
+          </Text>
         </TouchableOpacity>
       </View>
     );
@@ -56,7 +59,7 @@ const ProductsList = memo(({ products, onEndReached }: ProductsListProps) => {
   if (products.length === 0) {
     return (
       <View className="m-4 gap-4 self-center text-4xl font-semibold">
-        <Text>No products found</Text>
+        <Text>{productList.labels.noItemsFound}</Text>
       </View>
     );
   }
@@ -133,7 +136,9 @@ export default function ProductList() {
         onPress={back}
         className="absolute left-2 top-[67] flex-row items-center rounded-full bg-green-600 p-2 px-4"
       >
-        <Text className="text-md font-bold text-white">Back</Text>
+        <Text className="text-md font-bold text-white">
+          {productList.labels.back}
+        </Text>
       </TouchableOpacity>
       <SearchBar setQuery={setQuery} query={query} />
       <SearchResult query={query} clearQuery={clearQuery} />

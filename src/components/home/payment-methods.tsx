@@ -1,5 +1,6 @@
 import images from 'assets';
 
+import { dashboard } from '@/translations/en.json';
 import { Image, Text, TouchableOpacity, View } from '@/ui';
 
 const PaymentMethods = () => {
@@ -11,7 +12,7 @@ const PaymentMethods = () => {
           className="mb-6 h-9 w-9"
           contentFit="contain"
         />
-        <Text>Credit</Text>
+        <Text>{dashboard.labels.credit}</Text>
       </TouchableOpacity>
       <View className="mx-5 h-full w-px bg-black" />
       <TouchableOpacity className="mx-3 items-center justify-items-center">
@@ -20,7 +21,7 @@ const PaymentMethods = () => {
           className="mb-6 h-9 w-9"
           contentFit="contain"
         />
-        <Text>Paypal</Text>
+        <Text>{dashboard.labels.paypal}</Text>
       </TouchableOpacity>
       <View className="mx-5 h-full w-px bg-black" />
       <TouchableOpacity className="mx-3 items-center justify-items-center">
@@ -29,7 +30,7 @@ const PaymentMethods = () => {
           className="mb-6 h-9 w-9"
           contentFit="contain"
         />
-        <Text>Crypto</Text>
+        <Text>{dashboard.labels.crypto}</Text>
       </TouchableOpacity>
     </View>
   );

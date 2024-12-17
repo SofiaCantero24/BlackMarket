@@ -6,6 +6,7 @@ import { cssInterop } from 'nativewind';
 import { useForm } from 'react-hook-form';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
+import { auth } from '@/translations/en.json';
 import {
   type InputConstantsProps,
   type InputProps,
@@ -33,11 +34,11 @@ const TopImageLogo = () => {
 const BottomTextComponenent = () => {
   return (
     <View className="items-center justify-center rounded-lg bg-white p-4">
-      <Text className="font-medium">Don't have an account?</Text>
+      <Text className="font-medium">{auth.labels.withoutAccount}</Text>
       <Link href="/signup" asChild>
         <Button
           testID="signin-button"
-          label="Sing up"
+          label={auth.buttons.signup}
           className="h-12 w-full rounded-lg border-black"
           variant="outline"
         />
@@ -51,7 +52,7 @@ const ErrorMessageComponent = ({ showError }: { showError: boolean }) => {
     <View className="items-center">
       {showError && (
         <Text className="mb-1 mt-2 w-4/5 text-center font-bold text-error">
-          Sorry! Your email or password are incorrect.
+          {auth.error}
         </Text>
       )}
     </View>
@@ -91,13 +92,13 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
   const inputProps: InputVariableProps[] = [
     {
       name: 'email',
-      label: 'Email',
-      placeholder: 'Type your email or telephone',
+      label: auth.labels.email,
+      placeholder: auth.placeholders.email,
     },
     {
       name: 'password',
-      label: 'Password',
-      placeholder: 'Type your password',
+      label: auth.labels.password,
+      placeholder: auth.placeholders.password,
       secureTextEntry: true,
     },
   ];
@@ -117,14 +118,14 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
             )}
             <Button
               testID="login-button"
-              label="Log in"
+              label={auth.buttons.login}
               onPress={handleSubmit(onSubmit)}
               className="mb-2 h-14 w-full rounded-lg text-base font-medium"
             />
             <ErrorMessageComponent showError={hasErrors} />
             <View className="items-center">
               <Text className="mt-2 text-base font-bold text-link">
-                I forgot my password
+                {auth.labels.forgotPassword}
               </Text>
             </View>
           </View>
