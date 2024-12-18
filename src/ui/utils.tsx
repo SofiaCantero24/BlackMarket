@@ -10,7 +10,7 @@ export const HEIGHT = height;
 
 // for onError react queries and mutations
 export const showError = (error: AxiosError) => {
-  console.log(JSON.stringify(error?.response?.data));
+  // console.log(JSON.stringify(error?.response?.data));
   const description = extractError(error?.response?.data).trimEnd();
 
   showMessage({
@@ -27,6 +27,10 @@ export const showErrorMessage = (message: string = 'Something went wrong ') => {
     message,
     type: 'danger',
     duration: 4000,
+    floating: true,
+    style: {
+      marginTop: Platform.OS === 'ios' ? 50 : 0,
+    },
   });
 };
 

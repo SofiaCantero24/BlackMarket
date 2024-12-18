@@ -1,5 +1,6 @@
 import { router } from 'expo-router';
 import { useRef } from 'react';
+import { Platform } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
@@ -59,7 +60,14 @@ export default function Payment() {
       },
       {
         onSuccess: () => {
-          showMessage({ message: 'success', type: 'success' });
+          showMessage({
+            message: 'success',
+            type: 'success',
+            floating: true,
+            style: {
+              marginTop: Platform.OS === 'ios' ? 50 : 0,
+            },
+          });
           router.navigate('/(app)');
         },
         onError: (error) => {
@@ -79,7 +87,7 @@ export default function Payment() {
           <BuyForm ref={buyFormRef} onSubmitHandler={onSubmitHandler} />
           <FormButtons
             handleSubmit={() => {
-              buyFormRef.current?.submit;
+              buyFormRef.current?.submit();
             }}
           />
         </ScrollView>
