@@ -7,6 +7,7 @@ import { API_CONSTS } from '@/api/consts';
 import { useFavorites } from '@/api/favorites/use-favorites';
 import { FavoriteCard } from '@/components/favourites/favorite-card';
 import { HeaderLogo } from '@/components/header-logo';
+import { favorites } from '@/translations/en.json';
 import { SafeAreaView, Text, View } from '@/ui';
 
 export default function Favorite() {
@@ -32,7 +33,7 @@ export default function Favorite() {
       <SafeAreaView className="flex-1">
         <View className="bg-light_background pb-52">
           <HeaderLogo />
-          <Text className="my-4 px-4 text-lg">My favourites</Text>
+          <Text className="my-4 px-4 text-lg">{favorites.labels.tittle}</Text>
           <FlatList
             className="pb-6"
             onEndReached={handleLoadMore}
