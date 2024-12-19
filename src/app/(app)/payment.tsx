@@ -7,6 +7,7 @@ import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { usePurchaseOrder } from '@/api/purchase/use-purchase';
 import type { BuyFormSubmitHandler } from '@/components/payment/buy-form';
 import { BuyForm } from '@/components/payment/buy-form';
+import { purchaseForm } from '@/translations/en.json';
 import { Button, SafeAreaView, ScrollView, showErrorMessage, View } from '@/ui';
 
 type FormButtonsProps = {
@@ -17,14 +18,14 @@ const FormButtons = ({ handleSubmit }: FormButtonsProps) => {
   return (
     <View className="bg-light_background px-4">
       <Button
-        label="Buy"
+        label={purchaseForm.buttons.buy}
         className="h-12 "
         textClassName="font-bold text-base"
         onPress={handleSubmit}
       />
       <Button
         variant="outline"
-        label="Cancel"
+        label={purchaseForm.buttons.cancel}
         className="mb-8"
         onPress={() => {
           router.back();

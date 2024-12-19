@@ -7,6 +7,7 @@ import { usePurchases } from '@/api/purchase/get-purchases';
 import type { Purchase } from '@/api/purchase/types';
 import { HeaderLogo } from '@/components/header-logo';
 import { PurchaseCard } from '@/components/purchases/purchase-card';
+import { purchases } from '@/translations/en.json';
 import { SafeAreaView, Text, View } from '@/ui';
 
 export default function Purchases() {
@@ -42,7 +43,7 @@ export default function Purchases() {
     <SafeAreaView className="bg-light_background">
       <HeaderLogo />
       <View className=" bg-light_background pb-32 pt-4">
-        <Text className="mx-4">My previous purchases</Text>
+        <Text className="mx-4">{purchases.labels.previousPurchases}</Text>
         <FlatList
           data={products?.allLineItems}
           extraData={products?.allLineItems}
