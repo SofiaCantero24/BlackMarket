@@ -56,6 +56,8 @@ export interface NInputProps extends TextInputProps {
   error?: string;
   labelClassname?: string;
   showError?: boolean;
+  isCardNumber?: boolean;
+  isCVC?: boolean;
 }
 
 interface ShowPasswordIconProps {
@@ -200,14 +202,40 @@ export function ControlledInput<T extends FieldValues>(
   props: ControlledInputProps<T>
 ) {
   const { name, control, rules, ...inputProps } = props;
-
   const { field, fieldState } = useController({ control, name, rules });
+
+  const formatCardNumber = (text: string) => {
+    const cleaned = text.replace(/\D/g, '');
+
+    const truncated = cleaned.slice(0, 16);
+
+    return truncated.replace(/(\d{4})(?=\d)/g, '$1 ');
+  };
+
+  const handleChangeText = (text: string) => {
+    const formattedText = props.isCardNumber ? formatCardNumber(text) : text;
+
+    field.onChange(formattedText);
+  };
+
+  const getCharacterLimit = () => {
+    if (props.isCardNumber) {
+      return 19;
+    }
+    if (props.isCVC) {
+      return 3;
+    }
+    return undefined;
+  };
+
   return (
     <Input
       ref={field.ref}
       autoCapitalize="none"
-      onChangeText={field.onChange}
+      onChangeText={handleChangeText}
       value={(field.value as string) || ''}
+      keyboardType={props.isCardNumber || props.isCVC ? 'numeric' : 'default'}
+      maxLength={getCharacterLimit()}
       {...inputProps}
       error={fieldState.error?.message}
     />

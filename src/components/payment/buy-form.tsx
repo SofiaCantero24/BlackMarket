@@ -19,6 +19,7 @@ type SectionFormProps = {
   titleClassname?: string;
   inputClassname?: string;
   textClassname?: string;
+  isCreditCard?: boolean;
 };
 
 export const _addressSchema = z.object({
@@ -62,10 +63,7 @@ export const additionalAddressSchema = z.object({
   }),
 });
 
-const schema = _addressSchema
-  .and(_cardSchema)
-  .and(dateSchema)
-  .and(additionalAddressSchema);
+const schema = _addressSchema.and(_cardSchema).and(dateSchema);
 
 export type TBuyFormFields = z.infer<typeof schema>;
 
@@ -144,12 +142,14 @@ const cardFields = [
     label: purchaseForm.labels.cardNumber,
     required: true,
     placeholder: purchaseForm.placeholders.cardNumber,
+    isCardNumber: true,
   },
   {
     name: 'cvcCode',
     label: purchaseForm.placeholders.cvcCode,
     required: true,
     placeholder: purchaseForm.placeholders.cvcCode,
+    isCVC: true,
   },
 ];
 

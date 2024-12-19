@@ -6,6 +6,8 @@ type FieldProps = {
   label: string;
   required?: boolean;
   placeholder?: string;
+  isCardNumber?: boolean;
+  isCVC?: boolean;
 };
 
 type FromInputsProps = {
@@ -30,20 +32,24 @@ export const FormInputs = ({
   return (
     <View>
       {title && <Text className={titleClassname}>{title}</Text>}
-      {fields.map(({ label, name, placeholder, required }) => (
-        <View key={name} className="">
-          <Text className={textClassname}>
-            {label} {required ? symbols.required : ' '}
-          </Text>
-          <ControlledInput
-            className={inputClassname}
-            control={control}
-            name={name}
-            placeholder={placeholder}
-            editable={editable}
-          />
-        </View>
-      ))}
+      {fields.map(
+        ({ label, name, placeholder, required, isCardNumber, isCVC }) => (
+          <View key={name} className="">
+            <Text className={textClassname}>
+              {label} {required ? symbols.required : ' '}
+            </Text>
+            <ControlledInput
+              className={inputClassname}
+              control={control}
+              name={name}
+              placeholder={placeholder}
+              editable={editable}
+              isCardNumber={isCardNumber}
+              isCVC={isCVC}
+            />
+          </View>
+        )
+      )}
     </View>
   );
 };
